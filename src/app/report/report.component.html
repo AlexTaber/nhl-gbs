@@ -1,0 +1,12 @@
+<ng-container *ngIf="report$ | async">
+  <p
+    *ngFor="let goalie of (report$ | async).goalies"
+  >
+    {{ goalie.fullName }} - 
+    <ng-container
+      ngFor="let form of goalie?.games[0]?.forms"
+    >
+       |
+    </ng-container>
+  </p>
+</ng-container>
