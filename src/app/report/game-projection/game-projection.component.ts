@@ -7,8 +7,8 @@ function getInitalProjectionData(): ProjectionData {
 }
 
 function getDataPoints(goalsToTrack: number[]): ProjectionDataPoint[] {
-  const shotRange = 3;
-  const maxShotCount = 28;
+  const shotRange = 5;
+  const maxShotCount = 32;
   const dataPointCount = Math.floor(maxShotCount / shotRange);
   const data: ProjectionDataPoint[] = [];
   for (let i = 0; i < dataPointCount; i ++) {
@@ -136,7 +136,7 @@ export class GameProjectionComponent implements OnInit {
   }
 
   private getChartDataPointData(item: ProjectionDataPointItem, report: Report): number {
-    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter);
-    return item.shotsAfter > (report.totalShots * 0.01) ? value : null;
+    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter) - ((report.totalShots - report.totalGoalsAgainst) / report.totalShots);
+    return item.shotsAfter > (report.totalShots * (0.025 / this.projectionData.dataPoints.length)) ? value : null;
   }
 }

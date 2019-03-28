@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Report, Goalie, GoalieGame, GoalieForm, RawGame } from './report.model';
+import { Report, Goalie, GoalieGame, GoalieForm } from './report.model';
 import { guid } from '@datorama/akita';
 
 interface Play {
@@ -26,32 +26,27 @@ export class ReportFactory {
             id: guid(),
             teamId: teamId,
             goalies: [],
-            rawGames: [],
             totalGoalsAgainst: 0,
             totalShots: 0
         }
     }
 
     updateReportFromGame(report: Report, gameData: any): Report {
-        const rawGame = this.getNewRawGame(gameData.gamePk);
-        report.rawGames.push(rawGame);
         const plays: Play[] = gameData.liveData.plays.allPlays;
         const shots = this.getShotsAgainstFromPlays(plays, report.teamId);
-        rawGame.shots = shots.length;
-        rawGame.goalsFor = this.getGoalSupportFromPlays(plays, report.teamId);
-        return this.updateReportFromShots(report, shots, rawGame);
+        return this.updateReportFromShots(report, shots, gameData.gamePk);
     }
 
-    private updateReportFromShots(report: Report, shots: Play[], game: RawGame): Report {
-        return shots.reduce((report: Report, shot: Play) => this.updateReportFromShot(report, shot, game), report);
+    private updateReportFromShots(report: Report, shots: Play[], gameId: number): Report {
+        return shots.reduce((report: Report, shot: Play) => this.updateReportFromShot(report, shot, gameId), report);
     }
 
-    private updateReportFromShot(report: Report, shot: Play, game: RawGame): Report {
-        this.updateReportGoalieFromShot(report, shot, game);
+    private updateReportFromShot(report: Report, shot: Play, gameId: number): Report {
+        this.updateReportGoalieFromShot(report, shot, gameId);
         return report;
     }
 
-    private updateReportGoalieFromShot(report: Report, shot: Play, game: RawGame): void {
+    private updateReportGoalieFromShot(report: Report, shot: Play, gameId: number): void {
         const shotGoalie = shot.players.find(player => player.playerType === "Goalie");
         if (!!shotGoalie) {
             let reportGoalie = report.goalies.find(goalie => goalie.id === shotGoalie.player.id);
@@ -59,9 +54,9 @@ export class ReportFactory {
                 reportGoalie = this.getNewReportGoalie(shotGoalie);
                 report.goalies.push(reportGoalie);
             }
-            let goalieGame = reportGoalie.games.find(goalieGame => goalieGame.id === game.id);
+            let goalieGame = reportGoalie.games.find(goalieGame => goalieGame.id === gameId);
             if (!goalieGame) {
-                goalieGame = this.getNewGoalieGame(game.id);
+                goalieGame = this.getNewGoalieGame(gameId);
                 reportGoalie.games.push(goalieGame);
             }
 
@@ -100,14 +95,6 @@ export class ReportFactory {
     private getNewGoalieForm(): GoalieForm {
         return {
             goalAllowed: false,
-            shots: 0
-        }
-    }
-
-    private getNewRawGame(gameId: number): RawGame {
-        return {
-            id: gameId,
-            goalsFor: 0,
             shots: 0
         }
     }

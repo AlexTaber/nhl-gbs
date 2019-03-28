@@ -1,6 +1,5 @@
 import { ReportStore } from './report.store';
 import { Injectable } from '@angular/core';
-import { Report } from './report.model';
 import { ReportFetcherService } from './report-fetcher.service';
 
 @Injectable({ providedIn: 'root' })
@@ -12,8 +11,8 @@ export class ReportService {
   ) {
   }
 
-  setReportFromGameIds(year: number, teamId?: number) {
-    this.fetcher.getReport(year, teamId).subscribe(report => {
+  setLocalReport(year: number) {
+    this.fetcher.getLocalReport(year).subscribe(report => {
       this.reportStore.add(report);
       this.reportStore.setActive(report.id);
       console.log(report);

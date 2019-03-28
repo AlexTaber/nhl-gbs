@@ -18,6 +18,6 @@ export class ReportComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.reportService.setReportFromGameIds(2018, 12);
+    this.reportService.setLocalReport(2018);
   }
 }

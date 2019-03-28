@@ -4,22 +4,28 @@ import { Observable, of } from 'rxjs';
 import { concatMap, flatMap } from 'rxjs/operators';
 import { Report } from './report.model';
 import { ReportFactory } from './report.factory';
-import { data } from '../../../assets/test-report.js';
+import { data2018 } from '../../../assets/report-2018.js';
+import { data2017 } from '../../../assets/report-2017.js';
+import { data2016 } from '../../../assets/report-2016.js';
+import { data2015 } from '../../../assets/report-2015.js';
+import { data2014 } from '../../../assets/report-2014.js';
 
 @Injectable({ providedIn: 'root' })
 export class ReportFetcherService {
-  testing: boolean = true;
+  localReports = {
+    '2018': data2018,
+    '2017': data2017,
+    '2016': data2016,
+    '2015': data2015,
+    '2014': data2014
+  };
 
   constructor(
     private http: HttpClient,
     private factory: ReportFactory
   ) {}
 
-  getReport(year: number, teamId: number): Observable<Report> {
-    return (this.testing) ? this.getLocalReport() : this.getRemoteReport(year, teamId);
-  }
-
-  private getRemoteReport(year: number, teamId: number): Observable<Report> {
+  getRemoteReport(year: number, teamId: number): Observable<Report> {
     const report: Report = this.factory.getInitialReport(teamId);
 
     return this.getGames(year, teamId).pipe(
@@ -30,8 +36,8 @@ export class ReportFetcherService {
     )
   }
 
-  private getLocalReport(): Observable<Report> {
-    return of(data);
+  getLocalReport(year): Observable<Report> {
+    return of(this.localReports[year]);
   }
 
   private getGameAndUpdateReport(report: Report, gameIds: number[], currentIndex: number): Observable<Report> {

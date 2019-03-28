@@ -1,4 +1,18 @@
-<app-game-projection
-  *ngIf="report$ | async"
-  [report]="(report$ | async)"
-></app-game-projection>
+<div class="row">
+  <div class="col-md-12">
+    <app-report-filters></app-report-filters>
+  </div>
+  <div class="col-md-6">
+    <app-game-projection
+      *ngIf="report$ | async"
+      [report]="(report$ | async)"
+    ></app-game-projection>
+  </div>
+
+  <div class="col-md-6">
+    <app-form-splits
+      *ngIf="report$ | async"
+      [report]="(report$ | async)"
+    ></app-form-splits>
+  </div>
+</div>
