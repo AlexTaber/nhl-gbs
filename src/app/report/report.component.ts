@@ -17,7 +17,5 @@ export class ReportComponent implements OnInit {
     private reportQuery: ReportQuery
   ) { }
 
-  ngOnInit() {
-    this.reportService.setLocalReport(2018);
-  }
+  ngOnInit() {}
 }

@@ -11,5 +11,4 @@ export class ReportStore extends EntityStore<ReportState, Report> {
   constructor() {
     super();
   }
-
 }

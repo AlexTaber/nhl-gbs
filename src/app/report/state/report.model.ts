@@ -2,6 +2,7 @@ import { ID } from '@datorama/akita';
 
 export interface Report {
   id: ID;
+  year: string,
   teamId: number;
   goalies: Goalie[];
   totalGoalsAgainst: number;

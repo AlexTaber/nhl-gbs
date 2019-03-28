@@ -28,6 +28,7 @@ export class FormSplitsComponent implements OnInit {
   formSplitReport: FormSplitReport;
   chartData: any[];
   chartColumns: string[];
+  chartOptions: any = this.getChartOptions();
 
   constructor() { }
 
@@ -74,5 +75,14 @@ export class FormSplitsComponent implements OnInit {
 
   private setColumnsData(): void {
     this.chartColumns = [ 'Between Goals', 'Save %' ]
+  }
+
+  private getChartOptions(): any {
+    return {
+      vAxis: {
+        minValue: -0.02,
+        maxValue: 0.02
+      }
+    }
   }
 }

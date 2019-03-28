@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Report, Goalie, GoalieGame, GoalieForm } from './report.model';
 import { guid } from '@datorama/akita';
+import { YearOptionValue } from '../ui-state/ui-report.model';
 
 interface Play {
     result: {
@@ -21,9 +22,10 @@ interface Play {
 
 @Injectable({ providedIn: 'root' })
 export class ReportFactory {
-    getInitialReport(teamId: number): Report {
+    getInitialReport(year: YearOptionValue, teamId: number): Report {
         return {
             id: guid(),
+            year: year,
             teamId: teamId,
             goalies: [],
             totalGoalsAgainst: 0,

@@ -52,6 +52,7 @@ export class GameProjectionComponent implements OnInit {
   projectionData: ProjectionData;
   chartData: any;
   columnNames: any[];
+  chartOptions: any = this.getChartOptions();
 
   constructor() { }
 
@@ -138,5 +139,14 @@ export class GameProjectionComponent implements OnInit {
   private getChartDataPointData(item: ProjectionDataPointItem, report: Report): number {
     const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter) - ((report.totalShots - report.totalGoalsAgainst) / report.totalShots);
     return item.shotsAfter > (report.totalShots * (0.025 / this.projectionData.dataPoints.length)) ? value : null;
+  }
+
+  private getChartOptions(): any {
+    return {
+      vAxis: {
+        minValue: -0.02,
+        maxValue: 0.02
+      }
+    }
   }
 }
