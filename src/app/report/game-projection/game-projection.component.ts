@@ -2,12 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Goalie, GoalieGame, GoalieForm, Report } from '../state/report.model';
 
 function getInitalProjectionData(): ProjectionData {
-  return { dataPoints: getDataPoints(), goalsToTrack: [ 1, 2 ] };
+  const goalsToTrack = [ 1, 2, 3 ];
+  return { dataPoints: getDataPoints(goalsToTrack), goalsToTrack: goalsToTrack };
 }
 
-function getDataPoints(): ProjectionDataPoint[] {
-  const shotRange = 4;
-  const maxShotCount = 32;
+function getDataPoints(goalsToTrack: number[]): ProjectionDataPoint[] {
+  const shotRange = 3;
+  const maxShotCount = 28;
   const dataPointCount = Math.floor(maxShotCount / shotRange);
   const data: ProjectionDataPoint[] = [];
   for (let i = 0; i < dataPointCount; i ++) {
@@ -15,7 +16,9 @@ function getDataPoints(): ProjectionDataPoint[] {
       minShotCount: 1 + (i * shotRange),
       maxShotCount: i < dataPointCount - 1 ? shotRange + (i * shotRange) : undefined,
       includeGreaterThan: i === dataPointCount - 1,
-      items: []
+      items: goalsToTrack.map(() => {
+        return { shotsAfter: 0, goalsAfter: 0 }
+      })
     })
   }
   return data;
@@ -48,6 +51,7 @@ export class GameProjectionComponent implements OnInit {
 
   projectionData: ProjectionData;
   chartData: any;
+  columnNames: any[];
 
   constructor() { }
 
@@ -57,7 +61,6 @@ export class GameProjectionComponent implements OnInit {
     this.projectionData = report.goalies.reduce((projectionData: ProjectionData, goalie: Goalie) => {
       return this.reduceProjectionDataFromGoalie(projectionData, goalie);
     }, getInitalProjectionData()),
-    console.log(this.projectionData);
     this.setChartData(report);
   }
 
@@ -83,11 +86,6 @@ export class GameProjectionComponent implements OnInit {
     const dataPoint = this.findDataPointToUpdateFromFormIndex(projectionData, game, goal - 1);
     if (!!dataPoint) {
       let item: ProjectionDataPointItem = dataPoint.items[goalIndex];
-      if (!item) {
-        item = { shotsAfter: 0, goalsAfter: 0 }
-        dataPoint.items.push(item);
-      }
-
       const remainingForms = game.forms.slice(goal, game.forms.length);
       item.shotsAfter += remainingForms.reduce((shots, form) => shots += form.shots, 0);
       item.goalsAfter += remainingForms.reduce((goals, form) => form.goalAllowed ? goals + 1 : goals, 0);
@@ -112,27 +110,21 @@ export class GameProjectionComponent implements OnInit {
   }
 
   private setChartData(report: Report): void {
-    this.chartData = {
-      chartType: 'LineChart',
-      dataTable: [
-        this.getChartColumns(),
-        ...this.projectionData.dataPoints.map((dataPoint: ProjectionDataPoint) => {
-          return [
-            this.getChartDataPointLabel(dataPoint),
-            ...dataPoint.items.map(item => this.getChartDataPointData(item, report))
-          ];
-        })
-      ]
-    };
-    console.log(this.chartData);
+    this.columnNames = this.getChartColumns();
+    this.chartData = [
+      ...this.projectionData.dataPoints.map((dataPoint: ProjectionDataPoint) => {
+        return [
+          this.getChartDataPointLabel(dataPoint),
+          ...dataPoint.items.map(item => this.getChartDataPointData(item, report))
+        ];
+      })
+    ];
   }
 
   private getChartColumns(): any[] {
     return [
       'Shot Range of Goal',
-      ...this.projectionData.goalsToTrack.map(goal => {
-        return { label: `Save % After ${goal} Goals` };
-      })
+      ...this.projectionData.goalsToTrack.map(goal => `Save % After ${goal} Goals`)
     ]
   }
 
@@ -144,7 +136,7 @@ export class GameProjectionComponent implements OnInit {
   }
 
   private getChartDataPointData(item: ProjectionDataPointItem, report: Report): number {
-    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter) - ((report.totalShots - report.totalGoalsAgainst) / report.totalShots);
-    return item.shotsAfter > (report.totalShots * 0.1) ? value : null;
+    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter);
+    return item.shotsAfter > (report.totalShots * 0.01) ? value : null;
   }
 }

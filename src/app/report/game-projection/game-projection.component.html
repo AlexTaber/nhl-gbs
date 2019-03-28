@@ -1,11 +1,11 @@
 <div class="row">
-  <google-chart
-    class="col-md-6"
-    *ngIf="chartData"
-    [data]="chartData"
-  ></google-chart>
-
-  <p class="col-md-6">
-    test
-  </p>
+  <div class="col-md-12">
+    <google-chart
+      *ngIf="chartData"
+      [type]="'LineChart'"
+      [data]="chartData"
+      [columnNames]="columnNames"
+      style="width: 100%;"
+    ></google-chart>
+  </div>
 </div>
