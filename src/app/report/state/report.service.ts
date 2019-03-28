@@ -12,10 +12,11 @@ export class ReportService {
   ) {
   }
 
-  setReportFromGameIds(year: number, teamId: number) {
+  setReportFromGameIds(year: number, teamId?: number) {
     this.fetcher.getReport(year, teamId).subscribe(report => {
       this.reportStore.add(report);
       this.reportStore.setActive(report.id);
+      console.log(report);
     });
   }
 }

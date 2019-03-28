@@ -137,7 +137,5 @@
     }
   },
   "defaultProject": "goalie-rotation",
-  "cli": {
-    "defaultCollection": "@datorama/akita"
-  }
+  "cli": {}
 }
