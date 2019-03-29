@@ -22,7 +22,7 @@ export class ReportComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fetcher.fetchAppearances('2010-10-01', '2019-03-29');
-    // this.fetcher.setLocalData();
+    // this.fetcher.fetchAppearances('2010-10-01', '2019-03-29');
+    this.fetcher.setLocalData();
   }
 }

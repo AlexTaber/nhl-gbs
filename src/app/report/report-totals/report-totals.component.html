@@ -1,0 +1,39 @@
+<div class="row"
+  *ngIf="appearanceTotals"
+>
+  <div class="col-md-4">
+    <mat-card class="card">
+      <mat-card-title>
+        Total Appearances
+      </mat-card-title>
+
+      <mat-card-content>
+        {{ appearanceTotals.appearanceCount }}
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-md-4">
+    <mat-card class="card">
+      <mat-card-title>
+        Total Shots
+      </mat-card-title>
+
+      <mat-card-content>
+        {{ appearanceTotals.shots }}
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-md-4">
+    <mat-card class="card">
+      <mat-card-title>
+        Save %
+      </mat-card-title>
+
+      <mat-card-content>
+        {{ appearanceTotals.savePerc }}
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

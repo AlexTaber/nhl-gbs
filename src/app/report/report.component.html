@@ -3,6 +3,12 @@
     <app-report-filters></app-report-filters>
   </div>
 
+  <div class="col-md-12">
+    <app-report-totals
+      [appearances]="appearances$ | async"
+    ></app-report-totals>
+  </div>
+
   <ng-container
     *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
   >

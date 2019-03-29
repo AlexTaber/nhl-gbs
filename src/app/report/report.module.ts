@@ -10,9 +10,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ReportTotalsComponent } from './report-totals/report-totals.component';
+import { MatCardModule } from '@angular/material';
 
 @NgModule({
-  declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent],
+  declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent, ReportTotalsComponent],
   imports: [
     CommonModule,
     GoogleChartsModule.forRoot(),
@@ -21,7 +23,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatCardModule
   ],
   exports: [
     ReportComponent
