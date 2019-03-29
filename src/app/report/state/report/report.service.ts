@@ -26,6 +26,7 @@ export class ReportService {
     let filteredAppearances = this.appearanceQuery.getAll();
     filteredAppearances = this.checkApplyYearFilter(filter, filteredAppearances);
     filteredAppearances = this.checkApplyGoalieIdFilter(filter, filteredAppearances);
+    filteredAppearances = this.checkApplyComingOffBenchFilter(filter, filteredAppearances);
     this.store.update({
       appearances: filteredAppearances
     });
@@ -35,7 +36,17 @@ export class ReportService {
     return (!!filter.year) ? filteredAppearances.filter(app => app.gamePk.toString().slice(0, 4) === filter.year) : filteredAppearances;
   }
 
-  private checkApplyGoalieIdFilter(filter: AppearanceFilter, filteredAppearances: GoalieAppearance[]): GoalieAppearance[] {
+  private checkApplyGoalieIdFilter(
+    filter: AppearanceFilter,
+    filteredAppearances: GoalieAppearance[]
+  ): GoalieAppearance[] {
     return (!!filter.goalieId) ? filteredAppearances.filter(app => app.goalieId === filter.goalieId) : filteredAppearances;
+  }
+
+  private checkApplyComingOffBenchFilter(
+    filter: AppearanceFilter,
+    filteredAppearances: GoalieAppearance[]
+  ): GoalieAppearance[] {
+    return (filter.comingOffBench) ? filteredAppearances.filter(app => app.isComingOffBench) : filteredAppearances;
   }
 }

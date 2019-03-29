@@ -1,33 +1,36 @@
 import { Injectable } from '@angular/core';
 import { guid } from '@datorama/akita';
 import { GoalieAppearance, GoalieForm } from './goalie-appearance.model';
-import { Play, Player } from '../../report.fetcher';
+import { Play, Player, Team } from '../../report.fetcher';
 
 @Injectable({ providedIn: 'root' })
 export class GoalieAppearanceFactory {
     getAppearancesFromGame(gameData: any): GoalieAppearance[] {
         const plays: Play[] = gameData.liveData.plays.allPlays;
         const shots = this.getShotsFromPlays(plays);
-        return this.getAppearancesFromShots(shots, gameData.gamePk);
+        return this.getAppearancesFromShots(shots, gameData);
     }
 
     getShotsFromPlays(plays: Play[]): Play[] {
         return plays.filter(play => this.playIsValidShot(play));
     }
 
-    private getAppearancesFromShots(shots: Play[], gamePk: number): GoalieAppearance[] {
-        return shots.reduce((appearances: GoalieAppearance[], shot: Play) => this.updateAppearancesFromShot(appearances, shot, gamePk), []);
+    private getAppearancesFromShots(shots: Play[], gameData: any): GoalieAppearance[] {
+        return shots.reduce((appearances: GoalieAppearance[], shot: Play) => this.updateAppearancesFromShot(appearances, shot, gameData), []);
     }
 
     private updateAppearancesFromShot(
         appearances: GoalieAppearance[],
         shot: Play,
-        gamePk: number
+        gameData: any
     ): GoalieAppearance[] {
         const shotGoalie = shot.players.find(player => player.playerType === "Goalie");
-        let evaluatedAppearance = appearances.find(appearance => appearance.goalieId === shotGoalie.player.id && appearance.gamePk === gamePk);
+        const goalieTeam: Team = this.getGoalieTeamFromGameData(gameData, shot);
+        const teamAppearances = appearances.filter(appearance => appearance.gamePk === gameData.gamePk && appearance.teamId === goalieTeam.id);
+        let evaluatedAppearance = teamAppearances.find(appearance => appearance.goalieId === shotGoalie.player.id);
         if (!evaluatedAppearance) {
-            evaluatedAppearance = this.getNewGoalieAppearance(shotGoalie, gamePk);
+            const isComingOffBench = teamAppearances.length > 0;
+            evaluatedAppearance = this.getNewGoalieAppearance(shotGoalie, gameData.gamePk, goalieTeam.id, isComingOffBench);
             appearances.push(evaluatedAppearance);
         }
         const goalieForm = evaluatedAppearance.forms[evaluatedAppearance.forms.length - 1];
@@ -39,12 +42,19 @@ export class GoalieAppearanceFactory {
         return appearances;
     }
 
-    private getNewGoalieAppearance(shotGoalie: Player, gamePk: number): GoalieAppearance {
+    private getNewGoalieAppearance(
+        shotGoalie: Player,
+        gamePk: number,
+        teamId: number,
+        isComingOffBench: boolean
+    ): GoalieAppearance {
         return {
             id: guid(),
             gamePk,
             goalieId: shotGoalie.player.id,
-            forms: [ this.getNewGoalieForm() ]
+            forms: [ this.getNewGoalieForm() ],
+            teamId,
+            isComingOffBench
         }
     }
 
@@ -59,5 +69,10 @@ export class GoalieAppearanceFactory {
         const isValidGoal = play.result.eventTypeId === "GOAL" && !play.result.emptyNet;
         const shotGoalie = !!play.players ? play.players.find(player => player.playerType === "Goalie") : undefined;
         return !!shotGoalie && (isValidGoal || play.result.eventTypeId === "SHOT") && play.about.periodType === 'REGULAR';
+    }
+
+    private getGoalieTeamFromGameData(gameData: any, shot: Play): Team {
+        const teams = [ gameData.gameData.teams.home, gameData.gameData.teams.away ];
+        return teams.find(team => team.id !== shot.team.id);
     }
 }

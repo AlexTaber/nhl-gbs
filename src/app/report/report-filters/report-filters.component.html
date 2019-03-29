@@ -32,4 +32,11 @@
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+
+  <mat-checkbox
+    [checked]="(filter$ | async)?.comingOffBench"
+    (change)="onComingOffBenchUpdate($event)"
+  >
+    Coming Off Bench
+  </mat-checkbox>
 </form>

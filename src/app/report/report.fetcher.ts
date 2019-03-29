@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { concatMap, flatMap } from 'rxjs/operators';
+import { concatMap, switchMap } from 'rxjs/operators';
 import { Goalie } from './state/goalies/goalie.model';
 import { GoalieAppearanceService } from './state/appearances/goalie-appearance.service';
 import { GoalieService } from './state/goalies/goalie.service';
@@ -16,9 +16,7 @@ export interface Play {
       eventTypeId: "GOAL" | "SHOT",
       emptyNet: boolean
   },
-  team: {
-      id: number
-  },
+  team: Team,
   players: Player[],
   about: {
       periodType: 'REGULAR'
@@ -28,6 +26,10 @@ export interface Play {
 export interface Player {
   playerType: string,
   player: Goalie
+}
+
+export interface Team {
+  id: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -43,7 +45,7 @@ export class ReportFetcher {
 
   fetchAppearances(startDate: string, endDate: string): void {
     this.getGames(startDate, endDate).pipe(
-      flatMap((response: any, index: number) => {
+      switchMap((response: any, index: number) => {
         const gameIds = response.dates.reduce((ids, date) => this.reduceGameIdsFromDate(ids, date), []);
         return this.getGameAndAddEntities(gameIds, 0);
       })

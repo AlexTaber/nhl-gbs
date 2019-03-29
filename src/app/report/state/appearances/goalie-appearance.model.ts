@@ -5,6 +5,8 @@ export interface GoalieAppearance {
     gamePk: number;
     goalieId: number;
     forms: GoalieForm[];
+    teamId: number;
+    isComingOffBench: boolean;
 }
 
 export interface GoalieForm {

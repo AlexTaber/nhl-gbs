@@ -19,6 +19,10 @@ export class AppearanceFilterService {
     }
 
     updateGoalieId(goalieId: number | undefined): void {
-        this.store.update({goalieId: goalieId });
+        this.store.update({ goalieId });
+    }
+
+    updateComingOffBench(comingOffBench: boolean): void {
+        this.store.update({ comingOffBench });
     }
 }

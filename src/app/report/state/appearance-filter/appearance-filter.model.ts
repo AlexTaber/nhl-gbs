@@ -4,4 +4,5 @@ export interface AppearanceFilter {
     goalieId?: number;
     gameId?: number;
     year?: YearOptionValue;
+    comingOffBench: boolean;
 }

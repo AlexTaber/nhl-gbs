@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatSelectChange, MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatSelectChange, MatAutocompleteSelectedEvent, MatCheckboxChange } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { Goalie } from '../state/goalies/goalie.model';
@@ -8,6 +8,8 @@ import { UIReportStateQuery } from '../ui-state/ui-report-state.query';
 import { YearOption } from '../ui-state/ui-report-state.model';
 import { GoalieQuery } from '../state/goalies/goalie.query';
 import { AppearanceFilterService } from '../state/appearance-filter/appearance-filter.service';
+import { AppearanceFilterQuery } from '../state/appearance-filter/appearance-filter.query';
+import { AppearanceFilter } from '../state/appearance-filter/appearance-filter.model';
 
 @Component({
   selector: 'app-report-filters',
@@ -16,12 +18,14 @@ import { AppearanceFilterService } from '../state/appearance-filter/appearance-f
 })
 export class ReportFiltersComponent implements OnInit {
   yearOptions$: Observable<YearOption[]> = this.uiQuery.yearOptions$;
+  filter$: Observable<AppearanceFilter> = this.filterQuery.filter$;
 
   autocompleteControl = new FormControl();
   filteredGoalies$: Observable<Goalie[]>;
 
   constructor(
     private uiQuery: UIReportStateQuery,
+    private filterQuery: AppearanceFilterQuery,
     private filterService: AppearanceFilterService,
     private goalieQuery: GoalieQuery
   ) { }
@@ -43,6 +47,10 @@ export class ReportFiltersComponent implements OnInit {
     const goalie: Goalie = event.option.value;
     const goalieId = !!goalie ? goalie.id : undefined;
     this.filterService.updateGoalieId(goalieId);
+  }
+
+  onComingOffBenchUpdate(event: MatCheckboxChange): void {
+    this.filterService.updateComingOffBench(event.checked);
   }
 
   displayFn(goalie: Goalie | undefined) {

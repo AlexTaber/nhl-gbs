@@ -71,9 +71,7 @@ export class FormSplitsComponent implements OnInit {
   }
 
   private getChartDataItem(split: FormSplit): number {
-    const totalOtherShots = this.formSplitReport.totalShots - split.shots;
-    const totalOtherGoals = this.formSplitReport.totalGoals - split.goals;
-    return ((split.shots - split.goals) / split.shots) - ((totalOtherShots - totalOtherGoals) / totalOtherShots);
+    return ((split.shots - split.goals) / split.shots);
   }
 
   private setColumnsData(): void {
@@ -82,10 +80,6 @@ export class FormSplitsComponent implements OnInit {
 
   private getChartOptions(): any {
     return {
-      vAxis: {
-        minValue: -0.02,
-        maxValue: 0.02
-      }
     }
   }
 }
