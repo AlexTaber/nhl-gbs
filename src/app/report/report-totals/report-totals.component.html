@@ -4,11 +4,11 @@
   <div class="col-md-4">
     <mat-card class="card">
       <mat-card-title>
-        Total Appearances
-      </mat-card-title>
-
-      <mat-card-content>
         {{ appearanceTotals.appearanceCount }}
+      </mat-card-title>
+
+      <mat-card-content>
+        Total Appearances
       </mat-card-content>
     </mat-card>
   </div>
@@ -16,11 +16,11 @@
   <div class="col-md-4">
     <mat-card class="card">
       <mat-card-title>
-        Total Shots
-      </mat-card-title>
-
-      <mat-card-content>
         {{ appearanceTotals.shots }}
+      </mat-card-title>
+
+      <mat-card-content>
+        Total Shots  
       </mat-card-content>
     </mat-card>
   </div>
@@ -28,11 +28,11 @@
   <div class="col-md-4">
     <mat-card class="card">
       <mat-card-title>
-        Save %
+        {{ appearanceTotals.savePerc | number:'0.3' }}
       </mat-card-title>
 
       <mat-card-content>
-        {{ appearanceTotals.savePerc }}
+        Save %
       </mat-card-content>
     </mat-card>
   </div>

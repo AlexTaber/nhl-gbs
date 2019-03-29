@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReportTotalsComponent } from './report-totals/report-totals.component';
 import { MatCardModule } from '@angular/material';
+import { SectionModule } from '../section/section.module';
 
 @NgModule({
   declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent, ReportTotalsComponent],
@@ -24,7 +25,8 @@ import { MatCardModule } from '@angular/material';
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    SectionModule
   ],
   exports: [
     ReportComponent

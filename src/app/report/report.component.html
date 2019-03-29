@@ -1,29 +1,46 @@
 <div class="row">
-  <div class="col-md-12">
-    <app-report-filters></app-report-filters>
-  </div>
-
-  <div class="col-md-12">
-    <app-report-totals
-      [appearances]="appearances$ | async"
-    ></app-report-totals>
-  </div>
-
-  <ng-container
-    *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
+  <div
+    class="col-md-12"
   >
-    <div class="col-md-6">
-      <app-form-splits
-        [appearances]="appearances$ | async"
-      ></app-form-splits>
-    </div>
+    <app-section>
+      <app-section-header>
+        Results
+      </app-section-header>
 
-    <div class="col-md-6">
-      <app-game-projection
-        [appearances]="appearances$ | async"
-      ></app-game-projection>
-    </div>
-  </ng-container>
+      <app-section-content>
+        <app-report-filters></app-report-filters>
+      </app-section-content>
+
+      <app-section-content>
+        <div class="row">
+          <div class="col-md-12">
+            <app-report-totals
+              [appearances]="appearances$ | async"
+            ></app-report-totals>
+          </div>
+        </div>
+      </app-section-content>
+  
+      <app-section-content>
+        <div
+          class="row"
+          *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
+        >
+          <div class="col-md-6">
+            <app-form-splits
+              [appearances]="appearances$ | async"
+            ></app-form-splits>
+          </div>
+
+          <div class="col-md-6">
+            <app-game-projection
+              [appearances]="appearances$ | async"
+            ></app-game-projection>
+          </div>
+        </div>
+      </app-section-content>
+    </app-section>
+  </div>
 </div>
 
 <ng-template #NoMatchTemplate>
