@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { Goalie, GoalieGame } from '../state/report.model';
 import { GoogleChartComponent } from 'angular-google-charts';
+import { GoalieAppearance } from '../state/appearances/goalie-appearance.model';
 
 interface FormSplitReport {
   splits: FormSplit[];
@@ -26,8 +26,7 @@ function getInitialFormSplitReport(): FormSplitReport {
   styleUrls: ['./form-splits.component.scss']
 })
 export class FormSplitsComponent implements OnInit {
-  @Input() set goalies(goalies: Goalie[]) { this.onSetGoalies(goalies); }
-  @Input() set selectedGoalie(goalie: Goalie | undefined) { this.onSetSelectedGoalie(goalie); }
+  @Input() set appearances(appearances: GoalieAppearance[]) { this.onSetAppearances(appearances); }
 
   @ViewChild('chart') chart: GoogleChartComponent;
 
@@ -41,34 +40,21 @@ export class FormSplitsComponent implements OnInit {
   ngOnInit() {
   }
 
-  private onSetGoalies(goalies: Goalie[]): void {
-    this.formSplitReport = goalies.reduce((splitReport: FormSplitReport, goalie: Goalie) => {
-      this.updateSplitReportFromGames(splitReport, goalie.games);
+  private onSetAppearances(appearances: GoalieAppearance[]): void {
+    this.formSplitReport = appearances.reduce((splitReport: FormSplitReport, appearance: GoalieAppearance) => {
+      this.updateSplitReportFromAppearance(splitReport, appearance);
       return splitReport;
     }, getInitialFormSplitReport());
     this.setChartData();
     this.setColumnsData();
   }
 
-  private onSetSelectedGoalie(goalie: Goalie | undefined): void {
-    if (!!goalie) {
-      this.formSplitReport = getInitialFormSplitReport();
-      this.updateSplitReportFromGames(this.formSplitReport, goalie.games);
-      this.setChartData();
-      this.chart.wrapper.draw();
-    }
+  private updateSplitReportFromAppearance(splitReport: FormSplitReport, appearance: GoalieAppearance): void {
+    for (let i = 0; i < appearance.forms.length; i ++) { this.updateSplitReportFromFormIndex(splitReport, appearance, i); }
   }
 
-  private updateSplitReportFromGames(splitReport: FormSplitReport, games: GoalieGame[]): void {
-    for (let game of games) { this.updateSplitReportFromGame(splitReport, game); }
-  }
-
-  private updateSplitReportFromGame(splitReport: FormSplitReport, game: GoalieGame): void {
-    for (let i = 0; i < game.forms.length; i ++) { this.updateSplitReportFromFormIndex(splitReport, game, i); }
-  }
-
-  private updateSplitReportFromFormIndex(splitReport: FormSplitReport, game: GoalieGame, formIndex: number): void {
-    const form = game.forms[formIndex];
+  private updateSplitReportFromFormIndex(splitReport: FormSplitReport, appearance: GoalieAppearance, formIndex: number): void {
+    const form = appearance.forms[formIndex];
     splitReport.totalGoals += form.goalAllowed ? 1 : 0;
     splitReport.totalShots += form.shots;
     const split = splitReport.splits[formIndex];

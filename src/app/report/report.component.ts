@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ReportQuery } from './state/report.query';
 import { Observable } from 'rxjs';
-import { Report, Goalie } from './state/report.model';
-import { UIReportQuery } from './ui-state/ui-report.query';
+import { Goalie } from './state/goalies/goalie.model';
+import { GoalieQuery } from './state/goalies/goalie.query';
+import { GoalieAppearance } from './state/appearances/goalie-appearance.model';
+import { ReportFetcher } from './report.fetcher';
+import { ReportQuery } from './state/report/report.query';
 
 @Component({
   selector: 'app-report',
@@ -10,14 +12,17 @@ import { UIReportQuery } from './ui-state/ui-report.query';
   styleUrls: ['./report.component.scss']
 })
 export class ReportComponent implements OnInit {
-  report$: Observable<Report> = this.reportQuery.report$;
-  goalies$: Observable<Goalie[]> = this.reportQuery.goalies$;
-  selectedGoalie$: Observable<Goalie> = this.uiQuery.selectedGoalie$;
+  goalies$: Observable<Goalie[]> = this.goalieQuery.goalies$;
+  appearances$: Observable<GoalieAppearance[]> = this.reportQuery.appearances$;
 
   constructor(
+    private goalieQuery: GoalieQuery,
     private reportQuery: ReportQuery,
-    private uiQuery: UIReportQuery
+    private fetcher: ReportFetcher
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // this.fetcher.fetchAppearances('2019-03-28', '2019-03-29');
+    this.fetcher.setLocalData();
+  }
 }

@@ -1,11 +1,9 @@
 import { Store, StoreConfig } from '@datorama/akita';
 import { Injectable } from '@angular/core';
-import { UIReport } from './ui-report.model';
+import { UIReportState } from './ui-report-state.model';
 
-function createUIInitialState(): UIReport {
+function createUIInitialState(): UIReportState {
   return {
-    selectedGoalie: undefined,
-    selectedYear: 'All',
     yearOptions: [
       { name: 'All' },
       { name: '2018' },
@@ -19,7 +17,7 @@ function createUIInitialState(): UIReport {
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'UIReport', resettable: true })
-export class UIReportStore extends Store<UIReport> {
+export class UIReportStateStore extends Store<UIReportState> {
 
   constructor() {
     super(createUIInitialState());

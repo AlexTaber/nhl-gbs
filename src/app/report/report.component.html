@@ -2,19 +2,24 @@
   <div class="col-md-12">
     <app-report-filters></app-report-filters>
   </div>
-  <div class="col-md-6">
-    <app-form-splits
-      *ngIf="report$ | async"
-      [goalies]="goalies$ | async"
-      [selectedGoalie]="selectedGoalie$ | async"
-    ></app-form-splits>
-  </div>
 
-  <div class="col-md-6">
-    <app-game-projection
-      *ngIf="goalies$ | async"
-      [goalies]="goalies$ | async"
-      [selectedGoalie]="selectedGoalie$ | async"
-    ></app-game-projection>
-  </div>
+  <ng-container
+    *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
+  >
+    <div class="col-md-6">
+      <app-form-splits
+        [appearances]="appearances$ | async"
+      ></app-form-splits>
+    </div>
+
+    <div class="col-md-6">
+      <app-game-projection
+        [appearances]="appearances$ | async"
+      ></app-game-projection>
+    </div>
+  </ng-container>
 </div>
+
+<ng-template #NoMatchTemplate>
+  <p>No Matches!</p>
+</ng-template>

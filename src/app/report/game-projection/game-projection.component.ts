@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { Goalie, GoalieGame, GoalieForm, Report } from '../state/report.model';
 import { GoogleChartComponent } from 'angular-google-charts';
+import { GoalieAppearance } from '../state/appearances/goalie-appearance.model';
 
 function getInitalProjectionData(): ProjectionData {
   const goalsToTrack = [ 1, 2, 3 ];
@@ -50,8 +50,7 @@ interface ProjectionDataPointItem {
   styleUrls: ['./game-projection.component.scss']
 })
 export class GameProjectionComponent implements OnInit {
-  @Input() set goalies(goalies: Goalie[]) { this.onSetGoalies(goalies); }
-  @Input() set selectedGoalie(goalie: Goalie | undefined) { this.onSetSelectedGoalie(goalie); }
+  @Input() set appearances(appearances: GoalieAppearance[]) { this.onSetAppearances(appearances); }
 
   @ViewChild('chart') chart: GoogleChartComponent;
 
@@ -64,45 +63,31 @@ export class GameProjectionComponent implements OnInit {
 
   ngOnInit() {}
 
-  private onSetGoalies(goalies: Goalie[]): void {
-    this.projectionData = goalies.reduce((projectionData: ProjectionData, goalie: Goalie) => {
-      return this.reduceProjectionDataFromGoalie(projectionData, goalie);
+  private onSetAppearances(appearances: GoalieAppearance[]): void {
+    this.projectionData = appearances.reduce((projectionData: ProjectionData, appearance: GoalieAppearance) => {
+      this.updateDataPointByGame(projectionData, appearance);
+      this.updateShotTotalsByGame(projectionData, appearance);
+      return projectionData;
     }, getInitalProjectionData()),
     this.setChartData();
   }
 
-  private onSetSelectedGoalie(goalie: Goalie | undefined): void {
-    if (!!goalie) {
-      this.projectionData = this.reduceProjectionDataFromGoalie(getInitalProjectionData(), goalie);
-      this.setChartData();
-      this.chart.wrapper.draw();
-    }
-  }
-
-  private reduceProjectionDataFromGoalie(projectionData: ProjectionData, goalie: Goalie): ProjectionData {
-    return goalie.games.reduce((projectionData: ProjectionData, game: GoalieGame) => {
-      this.updateDataPointByGame(projectionData, game);
-      this.updateShotTotalsByGame(projectionData, game);
-      return projectionData;
-    }, projectionData);
-  }
-
-  private updateDataPointByGame(projectionData: ProjectionData, game: GoalieGame): void {
+  private updateDataPointByGame(projectionData: ProjectionData, appearance: GoalieAppearance): void {
     for (let i = 0; i < projectionData.goalsToTrack.length; i ++) {
-      this.updateDataPointByGoalIndex(projectionData, game, i);
+      this.updateDataPointByGoalIndex(projectionData, appearance, i);
     }
   }
 
   private updateDataPointByGoalIndex(
     projectionData: ProjectionData,
-    game: GoalieGame,
+    appearance: GoalieAppearance,
     goalIndex: number
   ): void {
     const goal = projectionData.goalsToTrack[goalIndex];
-    const dataPoint = this.findDataPointToUpdateFromFormIndex(projectionData, game, goal - 1);
+    const dataPoint = this.findDataPointToUpdateFromFormIndex(projectionData, appearance, goal - 1);
     if (!!dataPoint) {
       let item: ProjectionDataPointItem = dataPoint.items[goalIndex];
-      const remainingForms = game.forms.slice(goal, game.forms.length);
+      const remainingForms = appearance.forms.slice(goal, appearance.forms.length);
       item.shotsAfter += remainingForms.reduce((shots, form) => shots += form.shots, 0);
       item.goalsAfter += remainingForms.reduce((goals, form) => form.goalAllowed ? goals + 1 : goals, 0);
     }
@@ -110,17 +95,21 @@ export class GameProjectionComponent implements OnInit {
 
   private findDataPointToUpdateFromFormIndex(
     projectionData: ProjectionData,
-    game: GoalieGame,
+    appearance: GoalieAppearance,
     formIndex: number
   ): ProjectionDataPoint | undefined {
-    const form = game.forms[formIndex];
-    return !!form ? projectionData.dataPoints.find(dataPoint => this.isCorrectDataPoint(game, dataPoint, formIndex)) : undefined;
+    const form = appearance.forms[formIndex];
+    return !!form ? projectionData.dataPoints.find(dataPoint => this.isCorrectDataPoint(appearance, dataPoint, formIndex)) : undefined;
   }
 
-  private isCorrectDataPoint(game: GoalieGame, dataPoint: ProjectionDataPoint, formIndex: number): boolean {
-    const priorForms = game.forms.slice(0, formIndex + 1);
+  private isCorrectDataPoint(
+    appearance: GoalieAppearance,
+    dataPoint: ProjectionDataPoint,
+    formIndex: number
+  ): boolean {
+    const priorForms = appearance.forms.slice(0, formIndex + 1);
     const totalShots = priorForms.reduce((total, form) => total += form.shots, 0);
-    const form = game.forms[formIndex];
+    const form = appearance.forms[formIndex];
     const isUnderMaxShots = dataPoint.includeGreaterThan || totalShots <= dataPoint.maxShotCount;
     return form.goalAllowed && totalShots >= dataPoint.minShotCount && isUnderMaxShots;
   }
@@ -165,8 +154,8 @@ export class GameProjectionComponent implements OnInit {
     }
   }
 
-  private updateShotTotalsByGame(projectionData: ProjectionData, game: GoalieGame): void {
-    projectionData.totalGoalsAgainst += game.forms.reduce((goals, form) => form.goalAllowed ? goals + 1 : goals, 0);
-    projectionData.totalShots += game.forms.reduce((shots, form) => shots + form.shots, 0);
+  private updateShotTotalsByGame(projectionData: ProjectionData, appearance: GoalieAppearance): void {
+    projectionData.totalGoalsAgainst += appearance.forms.reduce((goals, form) => form.goalAllowed ? goals + 1 : goals, 0);
+    projectionData.totalShots += appearance.forms.reduce((shots, form) => shots + form.shots, 0);
   }
 }
