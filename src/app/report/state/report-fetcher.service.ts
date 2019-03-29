@@ -15,7 +15,7 @@ export class ReportFetcherService {
   ) {}
 
   getRemoteReport(year: YearOptionValue, teamId: number): Observable<Report> {
-    const report: Report = this.factory.getInitialReport(year, teamId);
+    const report: Report = this.factory.getInitialReport(year);
 
     return this.getGames(year, teamId).pipe(
       flatMap((response: any, index: number) => {

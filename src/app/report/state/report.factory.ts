@@ -22,11 +22,10 @@ interface Play {
 
 @Injectable({ providedIn: 'root' })
 export class ReportFactory {
-    getInitialReport(year: YearOptionValue, teamId: number): Report {
+    getInitialReport(year: YearOptionValue): Report {
         return {
             id: guid(),
             year: year,
-            teamId: teamId,
             goalies: [],
             totalGoalsAgainst: 0,
             totalShots: 0
@@ -35,8 +34,40 @@ export class ReportFactory {
 
     updateReportFromGame(report: Report, gameData: any): Report {
         const plays: Play[] = gameData.liveData.plays.allPlays;
-        const shots = this.getShotsAgainstFromPlays(plays, report.teamId);
+        const shots = this.getShotsFromPlays(plays);
         return this.updateReportFromShots(report, shots, gameData.gamePk);
+    }
+
+    mergeReports(reports: Report[]): Report {
+        console.log(reports);
+        return reports.reduce((combinedReport: Report, currentReport: Report) => {
+            this.combineReports(currentReport, combinedReport);
+            return combinedReport;
+        }, this.getInitialReport('All'))
+    }
+
+    private combineReports(addedReport: Report, report: Report): void {
+        for (let goalie of addedReport.goalies) { this.addOrUpdateReportGoalie(goalie, report); }
+        report.totalGoalsAgainst += addedReport.totalGoalsAgainst;
+        report.totalShots += addedReport.totalShots;
+    }
+
+    private addOrUpdateReportGoalie(goalie: Goalie, report: Report): void {
+        const existingGoalie = report.goalies.find(checkedGoalie => goalie.id === checkedGoalie.id);
+        if (existingGoalie) {
+            const index = report.goalies.indexOf(existingGoalie);
+            const newGoalie = {
+                ...existingGoalie,
+                games: [ ...goalie.games, ...existingGoalie.games ]
+            };
+            report.goalies = [
+                ...report.goalies.slice(0, index),
+                newGoalie,
+                ...report.goalies.slice(index + 1)
+            ] as Goalie[];
+        } else {
+            report.goalies.push(goalie);
+        }
     }
 
     private updateReportFromShots(report: Report, shots: Play[], gameId: number): Report {
@@ -101,11 +132,7 @@ export class ReportFactory {
         }
     }
 
-    private getShotsAgainstFromPlays(plays: Play[], teamId: number): Play[] {
-        return plays.filter(play => ((play.result.eventTypeId === "GOAL" && !play.result.emptyNet) || play.result.eventTypeId === "SHOT") && play.team.id !== teamId && play.about.periodType === 'REGULAR');
-    }
-
-    private getGoalSupportFromPlays(plays: Play[], teamId: number): number {
-        return plays.filter(play => play.result.eventTypeId === "GOAL" && !play.result.emptyNet && play.team.id === teamId && play.about.periodType === 'REGULAR').length;
+    private getShotsFromPlays(plays: Play[]): Play[] {
+        return plays.filter(play => ((play.result.eventTypeId === "GOAL" && !play.result.emptyNet) || play.result.eventTypeId === "SHOT") && play.about.periodType === 'REGULAR');
     }
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ReportService } from './state/report.service';
 import { ReportQuery } from './state/report.query';
 import { Observable } from 'rxjs';
-import { Report } from './state/report.model';
+import { Report, Goalie } from './state/report.model';
+import { UIReportQuery } from './ui-state/ui-report.query';
 
 @Component({
   selector: 'app-report',
@@ -11,10 +11,12 @@ import { Report } from './state/report.model';
 })
 export class ReportComponent implements OnInit {
   report$: Observable<Report> = this.reportQuery.report$;
+  goalies$: Observable<Goalie[]> = this.reportQuery.goalies$;
+  selectedGoalie$: Observable<Goalie> = this.uiQuery.selectedGoalie$;
 
   constructor(
-    private reportService: ReportService,
-    private reportQuery: ReportQuery
+    private reportQuery: ReportQuery,
+    private uiQuery: UIReportQuery
   ) { }
 
   ngOnInit() {}

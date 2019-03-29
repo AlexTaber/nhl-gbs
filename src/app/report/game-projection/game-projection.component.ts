@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Goalie, GoalieGame, GoalieForm, Report } from '../state/report.model';
+import { GoogleChartComponent } from 'angular-google-charts';
 
 function getInitalProjectionData(): ProjectionData {
   const goalsToTrack = [ 1, 2, 3 ];
-  return { dataPoints: getDataPoints(goalsToTrack), goalsToTrack: goalsToTrack };
+  return { dataPoints: getDataPoints(goalsToTrack), goalsToTrack: goalsToTrack, totalGoalsAgainst: 0, totalShots: 0 };
 }
 
 function getDataPoints(goalsToTrack: number[]): ProjectionDataPoint[] {
@@ -27,6 +28,8 @@ function getDataPoints(goalsToTrack: number[]): ProjectionDataPoint[] {
 interface ProjectionData {
   dataPoints: ProjectionDataPoint[];
   goalsToTrack: number[];
+  totalShots: number;
+  totalGoalsAgainst: number;
 }
 
 interface ProjectionDataPoint {
@@ -47,7 +50,10 @@ interface ProjectionDataPointItem {
   styleUrls: ['./game-projection.component.scss']
 })
 export class GameProjectionComponent implements OnInit {
-  @Input() set report(report: Report) { this.onSetReport(report); }
+  @Input() set goalies(goalies: Goalie[]) { this.onSetGoalies(goalies); }
+  @Input() set selectedGoalie(goalie: Goalie | undefined) { this.onSetSelectedGoalie(goalie); }
+
+  @ViewChild('chart') chart: GoogleChartComponent;
 
   projectionData: ProjectionData;
   chartData: any;
@@ -58,16 +64,25 @@ export class GameProjectionComponent implements OnInit {
 
   ngOnInit() {}
 
-  private onSetReport(report: Report) {
-    this.projectionData = report.goalies.reduce((projectionData: ProjectionData, goalie: Goalie) => {
+  private onSetGoalies(goalies: Goalie[]): void {
+    this.projectionData = goalies.reduce((projectionData: ProjectionData, goalie: Goalie) => {
       return this.reduceProjectionDataFromGoalie(projectionData, goalie);
     }, getInitalProjectionData()),
-    this.setChartData(report);
+    this.setChartData();
+  }
+
+  private onSetSelectedGoalie(goalie: Goalie | undefined): void {
+    if (!!goalie) {
+      this.projectionData = this.reduceProjectionDataFromGoalie(getInitalProjectionData(), goalie);
+      this.setChartData();
+      this.chart.wrapper.draw();
+    }
   }
 
   private reduceProjectionDataFromGoalie(projectionData: ProjectionData, goalie: Goalie): ProjectionData {
     return goalie.games.reduce((projectionData: ProjectionData, game: GoalieGame) => {
       this.updateDataPointByGame(projectionData, game);
+      this.updateShotTotalsByGame(projectionData, game);
       return projectionData;
     }, projectionData);
   }
@@ -110,13 +125,13 @@ export class GameProjectionComponent implements OnInit {
     return form.goalAllowed && totalShots >= dataPoint.minShotCount && isUnderMaxShots;
   }
 
-  private setChartData(report: Report): void {
+  private setChartData(): void {
     this.columnNames = this.getChartColumns();
     this.chartData = [
       ...this.projectionData.dataPoints.map((dataPoint: ProjectionDataPoint) => {
         return [
           this.getChartDataPointLabel(dataPoint),
-          ...dataPoint.items.map(item => this.getChartDataPointData(item, report))
+          ...dataPoint.items.map(item => this.getChartDataPointData(item))
         ];
       })
     ];
@@ -136,9 +151,9 @@ export class GameProjectionComponent implements OnInit {
     return label;
   }
 
-  private getChartDataPointData(item: ProjectionDataPointItem, report: Report): number {
-    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter) - ((report.totalShots - report.totalGoalsAgainst) / report.totalShots);
-    return item.shotsAfter > (report.totalShots * (0.025 / this.projectionData.dataPoints.length)) ? value : null;
+  private getChartDataPointData(item: ProjectionDataPointItem): number {
+    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter) - ((this.projectionData.totalShots - this.projectionData.totalGoalsAgainst) / this.projectionData.totalShots);
+    return item.shotsAfter > (this.projectionData.totalShots * (0.025 / this.projectionData.dataPoints.length)) ? value : null;
   }
 
   private getChartOptions(): any {
@@ -148,5 +163,10 @@ export class GameProjectionComponent implements OnInit {
         maxValue: 0.02
       }
     }
+  }
+
+  private updateShotTotalsByGame(projectionData: ProjectionData, game: GoalieGame): void {
+    projectionData.totalGoalsAgainst += game.forms.reduce((goals, form) => form.goalAllowed ? goals + 1 : goals, 0);
+    projectionData.totalShots += game.forms.reduce((shots, form) => shots + form.shots, 0);
   }
 }

@@ -3,16 +3,18 @@
     <app-report-filters></app-report-filters>
   </div>
   <div class="col-md-6">
-    <app-game-projection
+    <app-form-splits
       *ngIf="report$ | async"
-      [report]="(report$ | async)"
-    ></app-game-projection>
+      [goalies]="goalies$ | async"
+      [selectedGoalie]="selectedGoalie$ | async"
+    ></app-form-splits>
   </div>
 
   <div class="col-md-6">
-    <app-form-splits
-      *ngIf="report$ | async"
-      [report]="(report$ | async)"
-    ></app-form-splits>
+    <app-game-projection
+      *ngIf="goalies$ | async"
+      [goalies]="goalies$ | async"
+      [selectedGoalie]="selectedGoalie$ | async"
+    ></app-game-projection>
   </div>
 </div>

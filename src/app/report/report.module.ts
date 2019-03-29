@@ -7,6 +7,8 @@ import { FormSplitsComponent } from './form-splits/form-splits.component';
 import { ReportFiltersComponent } from './report-filters/report-filters.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent],
@@ -14,7 +16,10 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule,
     GoogleChartsModule.forRoot(),
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     ReportComponent

@@ -1,17 +1,25 @@
 import { Injectable } from '@angular/core';
 import { UIReportStore } from './ui-report.store';
 import { YearOptionValue } from './ui-report.model';
+import { Goalie } from '../state/report.model';
 
 @Injectable({ providedIn: 'root' })
 export class UIReportService {
 
   constructor(
-    private reportStore: UIReportStore
+    private uiStore: UIReportStore
   ) {}
 
   updateSelectedYear(year: YearOptionValue): void {
-    this.reportStore.update({
+    this.updateSelectedGoalie(undefined);
+    this.uiStore.update({
         selectedYear: year
+    });
+  }
+
+  updateSelectedGoalie(goalie: Goalie): void {
+    this.uiStore.update({
+        selectedGoalie: goalie
     });
   }
 }

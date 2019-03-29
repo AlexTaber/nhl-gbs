@@ -1,8 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Report, Goalie, GoalieGame, GoalieForm } from '../state/report.model';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Goalie, GoalieGame } from '../state/report.model';
+import { GoogleChartComponent } from 'angular-google-charts';
 
 interface FormSplitReport {
-  splits: FormSplit[]
+  splits: FormSplit[];
+  totalShots: number;
+  totalGoals: number;
 }
 
 interface FormSplit {
@@ -12,7 +15,7 @@ interface FormSplit {
 
 function getInitialFormSplitReport(): FormSplitReport {
   const splitCount = 4;
-  const report = { splits: [] };
+  const report = { splits: [], totalGoals: 0, totalShots: 0 };
   for (let i = 0; i < splitCount; i ++) { report.splits.push({ shots: 0, goals: 0 }) }
   return report;
 }
@@ -23,7 +26,10 @@ function getInitialFormSplitReport(): FormSplitReport {
   styleUrls: ['./form-splits.component.scss']
 })
 export class FormSplitsComponent implements OnInit {
-  @Input() set report(report: Report) { this.onSetReport(report); }
+  @Input() set goalies(goalies: Goalie[]) { this.onSetGoalies(goalies); }
+  @Input() set selectedGoalie(goalie: Goalie | undefined) { this.onSetSelectedGoalie(goalie); }
+
+  @ViewChild('chart') chart: GoogleChartComponent;
 
   formSplitReport: FormSplitReport;
   chartData: any[];
@@ -35,13 +41,22 @@ export class FormSplitsComponent implements OnInit {
   ngOnInit() {
   }
 
-  private onSetReport(report: Report): void {
-    this.formSplitReport = report.goalies.reduce((splitReport: FormSplitReport, goalie: Goalie) => {
+  private onSetGoalies(goalies: Goalie[]): void {
+    this.formSplitReport = goalies.reduce((splitReport: FormSplitReport, goalie: Goalie) => {
       this.updateSplitReportFromGames(splitReport, goalie.games);
       return splitReport;
     }, getInitialFormSplitReport());
-    this.setChartData(report);
+    this.setChartData();
     this.setColumnsData();
+  }
+
+  private onSetSelectedGoalie(goalie: Goalie | undefined): void {
+    if (!!goalie) {
+      this.formSplitReport = getInitialFormSplitReport();
+      this.updateSplitReportFromGames(this.formSplitReport, goalie.games);
+      this.setChartData();
+      this.chart.wrapper.draw();
+    }
   }
 
   private updateSplitReportFromGames(splitReport: FormSplitReport, games: GoalieGame[]): void {
@@ -54,6 +69,8 @@ export class FormSplitsComponent implements OnInit {
 
   private updateSplitReportFromFormIndex(splitReport: FormSplitReport, game: GoalieGame, formIndex: number): void {
     const form = game.forms[formIndex];
+    splitReport.totalGoals += form.goalAllowed ? 1 : 0;
+    splitReport.totalShots += form.shots;
     const split = splitReport.splits[formIndex];
     if (!!split) {
       splitReport.splits[formIndex].shots += form.shots;
@@ -61,15 +78,15 @@ export class FormSplitsComponent implements OnInit {
     }
   }
 
-  private setChartData(report: Report): void {
+  private setChartData(): void {
     this.chartData = this.formSplitReport.splits.map((split, index) => {
-      return [ `After Goal ${index} though Goal ${index + 1} (if any)`, this.getChartDataItem(split, report) ]
+      return [ `After Goal ${index} though Goal ${index + 1} (if any)`, this.getChartDataItem(split) ]
     });
   }
 
-  private getChartDataItem(split: FormSplit, report: Report): number {
-    const totalOtherShots = report.totalShots - split.shots;
-    const totalOtherGoals = report.totalGoalsAgainst - split.goals;
+  private getChartDataItem(split: FormSplit): number {
+    const totalOtherShots = this.formSplitReport.totalShots - split.shots;
+    const totalOtherGoals = this.formSplitReport.totalGoals - split.goals;
     return ((split.shots - split.goals) / split.shots) - ((totalOtherShots - totalOtherGoals) / totalOtherShots);
   }
 

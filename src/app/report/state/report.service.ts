@@ -8,13 +8,15 @@ import { data2015 } from '../../../assets/report-2015.js';
 import { data2014 } from '../../../assets/report-2014.js';
 import { ReportQuery } from './report.query';
 import { YearOptionValue } from '../ui-state/ui-report.model';
+import { ReportFactory } from './report.factory';
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
 
   constructor(
     private reportStore: ReportStore,
-    private reportQuery: ReportQuery
+    private reportQuery: ReportQuery,
+    private factory: ReportFactory
   ) {
     this.setInitialState();
   }
@@ -30,6 +32,9 @@ export class ReportService {
     this.reportStore.add(data2016);
     this.reportStore.add(data2015);
     this.reportStore.add(data2014);
-    this.reportStore.setActive(data2018.id);
+    const allReport = this.factory.mergeReports(this.reportQuery.getAll());
+    console.log(allReport);
+    this.reportStore.add(allReport);
+    this.reportStore.setActive(allReport.id);
   }
 }
