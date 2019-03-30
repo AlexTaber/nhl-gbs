@@ -1,4 +1,6 @@
-# GoalieRotation
+# NHL Goalie Prediction Model
+
+Using data pulled from the NHL's API, this project contains reports pertaining to the impact of letting in a goal of a goaltender's performance for the rest of the game. 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
 

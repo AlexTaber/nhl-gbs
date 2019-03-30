@@ -2,10 +2,9 @@
   <mat-form-field>
     <mat-label>Year</mat-label>
     <mat-select
-      [value]="selectedYear$ | async"
       (selectionChange)="onYearSelect($event)"
     >
-      <mat-option *ngFor="let option of yearOptions$ | async" [value]="option.name">
+      <mat-option *ngFor="let option of yearOptions$ | async" [value]="option.value">
         {{ option.name }}
       </mat-option>
     </mat-select>
@@ -26,7 +25,7 @@
       [displayWith]="displayFn"
       (optionSelected)="onGoalieSelect($event)"
     >
-      <mat-option [value]="undefined">All</mat-option>
+      <mat-option [value]="undefined">All Goalies</mat-option>
       <mat-option *ngFor="let goalie of filteredGoalies$ | async" [value]="goalie">
         {{ goalie.fullName }}
       </mat-option>

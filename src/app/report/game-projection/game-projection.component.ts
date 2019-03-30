@@ -129,7 +129,7 @@ export class GameProjectionComponent implements OnInit {
   private getChartColumns(): any[] {
     return [
       'Shot Range of Goal',
-      ...this.projectionData.goalsToTrack.map(goal => `Save % After ${goal} Goals`)
+      ...this.projectionData.goalsToTrack.map(goal => `After ${goal} Goal(s)`)
     ]
   }
 
@@ -141,16 +141,14 @@ export class GameProjectionComponent implements OnInit {
   }
 
   private getChartDataPointData(item: ProjectionDataPointItem): number {
-    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter) - ((this.projectionData.totalShots - this.projectionData.totalGoalsAgainst) / this.projectionData.totalShots);
+    const value = ((item.shotsAfter - item.goalsAfter) / item.shotsAfter);
     return item.shotsAfter > (this.projectionData.totalShots * (0.025 / this.projectionData.dataPoints.length)) ? value : null;
   }
 
   private getChartOptions(): any {
     return {
-      vAxis: {
-        minValue: -0.02,
-        maxValue: 0.02
-      }
+      vAxis: { title: 'Save %' },
+      hAxis: { title: `Shot Range In Which N'th Goal Occurred` },
     }
   }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { GoogleChartComponent } from 'angular-google-charts';
 import { GoalieAppearance } from '../state/appearances/goalie-appearance.model';
+import { getNumberWithOrdinal } from 'src/app/utils';
 
 interface FormSplitReport {
   splits: FormSplit[];
@@ -70,8 +71,8 @@ export class FormSplitsComponent implements OnInit {
 
   private getChartLabel(index: number): string {
     const isLast = index === this.formSplitReport.splits.length - 1;
-    const suffix = isLast ? '' : ` Through Goal ${index + 1} (if any)`;
-    const prefix = index === 0 ? 'Start of Game' : `After Goal ${index}`;
+    const suffix = isLast ? '' : ` => ${getNumberWithOrdinal(index + 1)} Goal`;
+    const prefix = index === 0 ? 'Start of Game' : `After ${getNumberWithOrdinal(index)}`;
     return `${prefix}${suffix}`;
   }
 
@@ -85,6 +86,7 @@ export class FormSplitsComponent implements OnInit {
 
   private getChartOptions(): any {
     return {
+      vAxis: { title: 'Save %' }
     }
   }
 }
