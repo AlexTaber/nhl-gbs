@@ -70,8 +70,9 @@ export class FormSplitsComponent implements OnInit {
 
   private getChartLabel(index: number): string {
     const isLast = index === this.formSplitReport.splits.length - 1;
-    const suffix = isLast ? '' : ` though Goal ${index + 1} (if any)`;
-    return `After Goal ${index}${suffix}`;
+    const suffix = isLast ? '' : ` Through Goal ${index + 1} (if any)`;
+    const prefix = index === 0 ? 'Start of Game' : `After Goal ${index}`;
+    return `${prefix}${suffix}`;
   }
 
   private getChartDataItem(split: FormSplit): number {

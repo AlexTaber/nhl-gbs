@@ -3,7 +3,7 @@ export interface UIReportState {
   filterOptions: FilterOption[];
 }
 
-export type YearOptionValue = 'All' | '2018' | '2017' | '2016' | '2015' | '2014';
+export type YearOptionValue = 'All' | '2018' | '2017' | '2016' | '2015' | '2014' | '2013' | '2012' | '2011' | '2010';
 
 export interface YearOption {
     name: YearOptionValue;
