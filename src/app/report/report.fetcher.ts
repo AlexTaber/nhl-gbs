@@ -7,9 +7,8 @@ import { GoalieAppearanceService } from './state/appearances/goalie-appearance.s
 import { GoalieService } from './state/goalies/goalie.service';
 import { GoalieAppearanceQuery } from './state/appearances/goalie-appearance.query';
 import { GoalieQuery } from './state/goalies/goalie.query';
-import { allGoalies } from '../../assets/goalies';
-import { allAppearances } from '../../assets/appearances';
 import { ReportService } from './state/report/report.service';
+import { GoalieAppearance } from './state/appearances/goalie-appearance.model';
 
 export interface Play {
   result: {
@@ -30,6 +29,14 @@ export interface Player {
 
 export interface Team {
   id: number;
+}
+
+interface GoalieJSON {
+  goalies: Goalie[]
+}
+
+interface AppearancesJSON {
+  appearances: GoalieAppearance[]
 }
 
 @Injectable({ providedIn: 'root' })
@@ -53,9 +60,13 @@ export class ReportFetcher {
   }
 
   setLocalData(): void {
-    this.goalieService.add(allGoalies);
-    this.appearanceService.add(allAppearances);
-    this.onFetchComplete();
+    this.http.get('https://s3.amazonaws.com/general-assets-324/goalies.json').subscribe((goalieJSON: GoalieJSON) => {
+      this.http.get('https://s3.amazonaws.com/general-assets-324/appearances.json').subscribe((appearanceJSON: AppearancesJSON) => {
+        this.goalieService.add(goalieJSON.goalies);
+        this.appearanceService.add(appearanceJSON.appearances);
+        this.onFetchComplete();
+      })
+    })
   }
 
   private reduceGameIdsFromDate(gameIds: number[], date: any): number[] {
