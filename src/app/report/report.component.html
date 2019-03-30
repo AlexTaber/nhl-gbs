@@ -1,4 +1,7 @@
-<div class="row">
+<div
+  *ngIf="!(fetching$ | async); else LoadingTemplate"
+  class="row"
+>
   <div
     class="col-md-12"
   >
@@ -11,38 +14,45 @@
         <app-report-filters></app-report-filters>
       </app-section-content>
 
-      <app-section-content>
-        <div class="row">
-          <div class="col-md-12">
-            <app-report-totals
-              [appearances]="appearances$ | async"
-            ></app-report-totals>
+      <ng-container
+        *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
+      >
+        <app-section-content>
+          <div class="row">
+            <div class="col-md-12">
+              <app-report-totals
+                [appearances]="appearances$ | async"
+              ></app-report-totals>
+            </div>
           </div>
-        </div>
-      </app-section-content>
-  
-      <app-section-content>
-        <div
-          class="row"
-          *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
-        >
-          <div class="col-md-6">
-            <app-form-splits
-              [appearances]="appearances$ | async"
-            ></app-form-splits>
-          </div>
+        </app-section-content>
+    
+        <app-section-content>
+          <div class="row">
+            <div class="col-md-6">
+              <app-form-splits
+                [appearances]="appearances$ | async"
+              ></app-form-splits>
+            </div>
 
-          <div class="col-md-6">
-            <app-game-projection
-              [appearances]="appearances$ | async"
-            ></app-game-projection>
+            <div class="col-md-6">
+              <app-game-projection
+                [appearances]="appearances$ | async"
+              ></app-game-projection>
+            </div>
           </div>
-        </div>
-      </app-section-content>
+        </app-section-content>
+      </ng-container>
     </app-section>
   </div>
 </div>
 
 <ng-template #NoMatchTemplate>
-  <p>No Matches!</p>
+  <app-section-content>
+    <p>No Data For This Filter</p>
+  </app-section-content>
+</ng-template>
+
+<ng-template #LoadingTemplate>
+  <app-report-loading></app-report-loading>
 </ng-template>

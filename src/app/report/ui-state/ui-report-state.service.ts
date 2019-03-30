@@ -7,4 +7,8 @@ export class UIReportStateService {
   constructor(
     private uiStore: UIReportStateStore
   ) {}
+
+  updateFetching(fetching: boolean): void {
+    this.uiStore.update({ fetching });
+  }
 }

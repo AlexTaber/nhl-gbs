@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SectionComponent } from './section/section.component';
 import { SectionContentComponent } from './section-content/section-content.component';
 import { SectionHeaderComponent } from './section-header/section-header.component';
+import { MatToolbarModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
     SectionHeaderComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatToolbarModule
   ],
   exports: [
     SectionComponent,

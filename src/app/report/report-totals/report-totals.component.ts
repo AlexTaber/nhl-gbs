@@ -4,6 +4,7 @@ import { GoalieAppearance } from '../state/appearances/goalie-appearance.model';
 interface AppearanceTotals {
   appearanceCount: number;
   shots: number;
+  goals: number;
   savePerc: number;
 }
 
@@ -32,6 +33,7 @@ export class ReportTotalsComponent implements OnInit {
     this.appearanceTotals = {
       appearanceCount: appearances.length,
       shots: totalShots,
+      goals: totalGoals,
       savePerc: (totalShots - totalGoals) / totalShots
     }
   }

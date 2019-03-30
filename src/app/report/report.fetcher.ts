@@ -9,6 +9,7 @@ import { GoalieAppearanceQuery } from './state/appearances/goalie-appearance.que
 import { GoalieQuery } from './state/goalies/goalie.query';
 import { ReportService } from './state/report/report.service';
 import { GoalieAppearance } from './state/appearances/goalie-appearance.model';
+import { UIReportStateService } from './ui-state/ui-report-state.service';
 
 export interface Play {
   result: {
@@ -47,7 +48,8 @@ export class ReportFetcher {
     private goalieService: GoalieService,
     private appearanceQuery: GoalieAppearanceQuery,
     private goalieQuery: GoalieQuery,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private uiService: UIReportStateService
   ) {}
 
   fetchAppearances(startDate: string, endDate: string): void {
@@ -56,15 +58,20 @@ export class ReportFetcher {
         const gameIds = response.dates.reduce((ids, date) => this.reduceGameIdsFromDate(ids, date), []);
         return this.getGameAndAddEntities(gameIds, 0);
       })
-    ).subscribe(() => this.onFetchComplete());
+    ).subscribe(() => {
+      this.onFetchComplete();
+      this.printData();
+    });
   }
 
   setLocalData(): void {
+    this.uiService.updateFetching(true);
     this.http.get('https://s3.amazonaws.com/general-assets-324/goalies.json').subscribe((goalieJSON: GoalieJSON) => {
       this.http.get('https://s3.amazonaws.com/general-assets-324/appearances.json').subscribe((appearanceJSON: AppearancesJSON) => {
         this.goalieService.add(goalieJSON.goalies);
         this.appearanceService.add(appearanceJSON.appearances);
         this.onFetchComplete();
+        this.uiService.updateFetching(false);
       })
     })
   }
@@ -99,7 +106,6 @@ export class ReportFetcher {
 
   private onFetchComplete(): void {
     this.reportService.updateAppearances();
-    this.printData();
   }
 
   private printData(): void {

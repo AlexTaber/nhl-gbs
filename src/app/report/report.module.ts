@@ -11,11 +11,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReportTotalsComponent } from './report-totals/report-totals.component';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatProgressBarModule } from '@angular/material';
 import { SectionModule } from '../section/section.module';
+import { ReportLoadingComponent } from './report-loading/report-loading.component';
 
 @NgModule({
-  declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent, ReportTotalsComponent],
+  declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent, ReportTotalsComponent, ReportLoadingComponent],
   imports: [
     CommonModule,
     GoogleChartsModule.forRoot(),
@@ -26,6 +27,7 @@ import { SectionModule } from '../section/section.module';
     ReactiveFormsModule,
     MatCheckboxModule,
     MatCardModule,
+    MatProgressBarModule,
     SectionModule
   ],
   exports: [

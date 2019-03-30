@@ -5,6 +5,7 @@ import { GoalieQuery } from './state/goalies/goalie.query';
 import { GoalieAppearance } from './state/appearances/goalie-appearance.model';
 import { ReportFetcher } from './report.fetcher';
 import { ReportQuery } from './state/report/report.query';
+import { UIReportStateQuery } from './ui-state/ui-report-state.query';
 
 @Component({
   selector: 'app-report',
@@ -14,11 +15,13 @@ import { ReportQuery } from './state/report/report.query';
 export class ReportComponent implements OnInit {
   goalies$: Observable<Goalie[]> = this.goalieQuery.goalies$;
   appearances$: Observable<GoalieAppearance[]> = this.reportQuery.appearances$;
+  fetching$: Observable<boolean> = this.uiQuery.fetching$;
 
   constructor(
     private goalieQuery: GoalieQuery,
     private reportQuery: ReportQuery,
-    private fetcher: ReportFetcher
+    private fetcher: ReportFetcher,
+    private uiQuery: UIReportStateQuery
   ) { }
 
   ngOnInit() {

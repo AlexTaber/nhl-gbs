@@ -1,31 +1,43 @@
 <div class="row"
   *ngIf="appearanceTotals"
 >
-  <div class="col-md-4">
+  <div class="col-md-3">
     <mat-card class="card">
       <mat-card-title>
         {{ appearanceTotals.appearanceCount }}
       </mat-card-title>
 
       <mat-card-content>
-        Total Appearances
+        Appearances
       </mat-card-content>
     </mat-card>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-3">
     <mat-card class="card">
       <mat-card-title>
         {{ appearanceTotals.shots }}
       </mat-card-title>
 
       <mat-card-content>
-        Total Shots  
+        Shots Against
       </mat-card-content>
     </mat-card>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-3">
+    <mat-card class="card">
+      <mat-card-title>
+        {{ appearanceTotals.goals }}
+      </mat-card-title>
+
+      <mat-card-content>
+        Goals Against
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-md-3">
     <mat-card class="card">
       <mat-card-title>
         {{ appearanceTotals.savePerc | number:'0.3' }}
