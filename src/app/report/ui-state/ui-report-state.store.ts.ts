@@ -4,6 +4,10 @@ import { UIReportState } from './ui-report-state.model';
 
 function createUIInitialState(): UIReportState {
   return {
+    filterOptions: [
+      { name: 'Coming Off Bench', value: 'comingOffBench' },
+      { name: 'Include Overtime Data', value: 'includeOvertime' }
+    ],
     yearOptions: [
       { name: 'All' },
       { name: '2018' },

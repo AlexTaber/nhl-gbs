@@ -12,4 +12,5 @@ export interface GoalieAppearance {
 export interface GoalieForm {
     shots: number;
     goalAllowed: boolean;
+    overtimeShotStart?: number;
 }

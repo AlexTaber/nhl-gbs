@@ -19,7 +19,7 @@ export interface Play {
   team: Team,
   players: Player[],
   about: {
-      periodType: 'REGULAR'
+      periodType: 'REGULAR' | 'OVERTIME'
   }
 }
 
@@ -87,7 +87,7 @@ export class ReportFetcher {
   }
 
   private onFetchComplete(): void {
-    this.reportService.updateAppearances(this.appearanceQuery.getAll());
+    this.reportService.updateAppearances();
     this.printData();
   }
 

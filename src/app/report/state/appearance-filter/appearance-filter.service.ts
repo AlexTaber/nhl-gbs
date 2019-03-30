@@ -22,7 +22,7 @@ export class AppearanceFilterService {
         this.store.update({ goalieId });
     }
 
-    updateComingOffBench(comingOffBench: boolean): void {
-        this.store.update({ comingOffBench });
+    updateFilter(diff: Partial<AppearanceFilter>): void {
+        this.store.update(diff);
     }
 }

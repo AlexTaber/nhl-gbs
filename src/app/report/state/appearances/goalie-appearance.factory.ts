@@ -35,6 +35,9 @@ export class GoalieAppearanceFactory {
         }
         const goalieForm = evaluatedAppearance.forms[evaluatedAppearance.forms.length - 1];
         goalieForm.shots++;
+        if (shot.about.periodType === 'OVERTIME' && !goalieForm.overtimeShotStart) {
+            goalieForm.overtimeShotStart = goalieForm.shots;
+        }
         if (shot.result.eventTypeId === 'GOAL') {
             goalieForm.goalAllowed = true;
             evaluatedAppearance.forms.push(this.getNewGoalieForm());
@@ -68,7 +71,7 @@ export class GoalieAppearanceFactory {
     private playIsValidShot(play: Play): boolean {
         const isValidGoal = play.result.eventTypeId === "GOAL" && !play.result.emptyNet;
         const shotGoalie = !!play.players ? play.players.find(player => player.playerType === "Goalie") : undefined;
-        return !!shotGoalie && (isValidGoal || play.result.eventTypeId === "SHOT") && play.about.periodType === 'REGULAR';
+        return !!shotGoalie && (isValidGoal || play.result.eventTypeId === "SHOT") && (play.about.periodType === 'REGULAR' || play.about.periodType === 'OVERTIME');
     }
 
     private getGoalieTeamFromGameData(gameData: any, shot: Play): Team {

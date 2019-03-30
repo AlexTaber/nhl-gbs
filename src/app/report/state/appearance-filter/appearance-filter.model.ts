@@ -5,4 +5,5 @@ export interface AppearanceFilter {
     gameId?: number;
     year?: YearOptionValue;
     comingOffBench: boolean;
+    includeOvertime: boolean;
 }

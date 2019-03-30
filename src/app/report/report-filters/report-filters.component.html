@@ -33,10 +33,14 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-checkbox
-    [checked]="(filter$ | async)?.comingOffBench"
-    (change)="onComingOffBenchUpdate($event)"
-  >
-    Coming Off Bench
-  </mat-checkbox>
+  <mat-form-field>
+    <mat-label>Additonal Filter Options</mat-label>
+    <mat-select
+      multiple
+      [formControl]="filterOptionsControl"
+      (ngModelChange)="onFilterOptionChange($event)"
+    >
+      <mat-option *ngFor="let option of filterOptions$ | async" [value]="option">{{option.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </form>

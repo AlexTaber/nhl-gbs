@@ -1,5 +1,11 @@
+@import '~@angular/material/theming';
+
 .section-header {
-    padding: 10px;
+    padding: 1px 10px;
     font-size: 2rem;
-    background-color: rgb(240, 240, 240);
+    color: #fff;
+
+    .section-header-content {
+        margin: 10px 0;
+    }
 }

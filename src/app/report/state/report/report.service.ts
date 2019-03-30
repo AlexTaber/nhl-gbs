@@ -3,7 +3,7 @@ import { ReportStore } from './report.store';
 import { AppearanceFilterQuery } from '../appearance-filter/appearance-filter.query';
 import { AppearanceFilter } from '../appearance-filter/appearance-filter.model';
 import { GoalieAppearanceQuery } from '../appearances/goalie-appearance.query';
-import { GoalieAppearance } from '../appearances/goalie-appearance.model';
+import { GoalieAppearance, GoalieForm } from '../appearances/goalie-appearance.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
@@ -16,10 +16,8 @@ export class ReportService {
     this.filterQuery.filter$.subscribe(filter => this.runFilter(filter));
   }
 
-  updateAppearances(appearances: GoalieAppearance[]): void {
-    this.store.update({
-      appearances
-    });
+  updateAppearances(): void {
+    this.runFilter(this.filterQuery.getValue());
   }
 
   private runFilter(filter: AppearanceFilter): void {
@@ -27,6 +25,7 @@ export class ReportService {
     filteredAppearances = this.checkApplyYearFilter(filter, filteredAppearances);
     filteredAppearances = this.checkApplyGoalieIdFilter(filter, filteredAppearances);
     filteredAppearances = this.checkApplyComingOffBenchFilter(filter, filteredAppearances);
+    filteredAppearances = this.checkApplyOvertimeFilter(filter, filteredAppearances);
     this.store.update({
       appearances: filteredAppearances
     });
@@ -48,5 +47,36 @@ export class ReportService {
     filteredAppearances: GoalieAppearance[]
   ): GoalieAppearance[] {
     return (filter.comingOffBench) ? filteredAppearances.filter(app => app.isComingOffBench) : filteredAppearances;
+  }
+
+  private checkApplyOvertimeFilter(
+    filter: AppearanceFilter,
+    filteredAppearances: GoalieAppearance[]
+  ): GoalieAppearance[] {
+    return (!filter.includeOvertime) ? filteredAppearances.map(app => this.removeOvertimeDataFromAppearance(app)) : filteredAppearances;
+  }
+
+  private removeOvertimeDataFromAppearance(appearance: GoalieAppearance): GoalieAppearance {
+    return {
+      ...appearance,
+      forms: appearance.forms.reduce((forms, form) => this.removeOvertimeDataFromForm(forms, form), [])
+    }
+  }
+
+  private removeOvertimeDataFromForm(forms: GoalieForm[], form: GoalieForm): GoalieForm[] {
+    if (form.overtimeShotStart === 1) {
+      return forms;
+    } else if (!!form.overtimeShotStart) {
+      const newForm: GoalieForm = {
+        ...form,
+        goalAllowed: false,
+        shots: form.overtimeShotStart - 1
+      }
+      forms.push(newForm);
+    } else {
+      forms.push(form);
+    }
+
+    return forms;
   }
 }

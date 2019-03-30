@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { Goalie } from '../state/goalies/goalie.model';
 import { UIReportStateQuery } from '../ui-state/ui-report-state.query';
-import { YearOption } from '../ui-state/ui-report-state.model';
+import { YearOption, FilterOption } from '../ui-state/ui-report-state.model';
 import { GoalieQuery } from '../state/goalies/goalie.query';
 import { AppearanceFilterService } from '../state/appearance-filter/appearance-filter.service';
 import { AppearanceFilterQuery } from '../state/appearance-filter/appearance-filter.query';
@@ -19,8 +19,10 @@ import { AppearanceFilter } from '../state/appearance-filter/appearance-filter.m
 export class ReportFiltersComponent implements OnInit {
   yearOptions$: Observable<YearOption[]> = this.uiQuery.yearOptions$;
   filter$: Observable<AppearanceFilter> = this.filterQuery.filter$;
+  filterOptions$: Observable<FilterOption[]> = this.uiQuery.filterOptions$;
 
   autocompleteControl = new FormControl();
+  filterOptionsControl = new FormControl();
   filteredGoalies$: Observable<Goalie[]>;
 
   constructor(
@@ -49,8 +51,13 @@ export class ReportFiltersComponent implements OnInit {
     this.filterService.updateGoalieId(goalieId);
   }
 
-  onComingOffBenchUpdate(event: MatCheckboxChange): void {
-    this.filterService.updateComingOffBench(event.checked);
+  onFilterOptionChange(options: FilterOption[]): void {
+    const filterState: AppearanceFilter = {
+      comingOffBench: !!options.find(option => option.value === 'comingOffBench'),
+      includeOvertime: !!options.find(option => option.value === 'includeOvertime')
+    }
+
+    this.filterService.updateFilter(filterState);
   }
 
   displayFn(goalie: Goalie | undefined) {

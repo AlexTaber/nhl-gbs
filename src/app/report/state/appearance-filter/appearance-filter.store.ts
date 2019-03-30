@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 import { AppearanceFilter } from './appearance-filter.model';
 
 function createInitialState(): AppearanceFilter {
-  return { comingOffBench: false };
+  return {
+    comingOffBench: false,
+    includeOvertime: false
+  };
 }
 
 @Injectable({ providedIn: 'root' })

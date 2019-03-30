@@ -57,17 +57,21 @@ export class FormSplitsComponent implements OnInit {
     const form = appearance.forms[formIndex];
     splitReport.totalGoals += form.goalAllowed ? 1 : 0;
     splitReport.totalShots += form.shots;
-    const split = splitReport.splits[formIndex];
-    if (!!split) {
-      splitReport.splits[formIndex].shots += form.shots;
-      splitReport.splits[formIndex].goals += form.goalAllowed ? 1 : 0;
-    }
+    const split = splitReport.splits[Math.min(formIndex, splitReport.splits.length - 1)];
+    split.shots += form.shots;
+    split.goals += form.goalAllowed ? 1 : 0;
   }
 
   private setChartData(): void {
     this.chartData = this.formSplitReport.splits.map((split, index) => {
-      return [ `After Goal ${index} though Goal ${index + 1} (if any)`, this.getChartDataItem(split) ]
+      return [ this.getChartLabel(index), this.getChartDataItem(split) ]
     });
+  }
+
+  private getChartLabel(index: number): string {
+    const isLast = index === this.formSplitReport.splits.length - 1;
+    const suffix = isLast ? '' : ` though Goal ${index + 1} (if any)`;
+    return `After Goal ${index}${suffix}`;
   }
 
   private getChartDataItem(split: FormSplit): number {
