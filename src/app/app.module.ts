@@ -17,10 +17,9 @@ import { NavBarModule } from './navbar/navbar.module';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ReportModule,
-    NavBarModule
+    ReportModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

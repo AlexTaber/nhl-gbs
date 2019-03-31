@@ -1,0 +1,24 @@
+<mat-horizontal-stepper #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Premise</ng-template>
+    
+    <app-report-info-premise
+      (close)="stepper.next()"
+    ></app-report-info-premise>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>How It Works</ng-template>
+    
+    <app-report-info-tutorial
+      (close)="stepper.next()"
+    ></app-report-info-tutorial>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Findings</ng-template>
+    
+    <app-report-info-findings
+      (close)="onDone()"
+    ></app-report-info-findings>
+  </mat-step>
+</mat-horizontal-stepper>

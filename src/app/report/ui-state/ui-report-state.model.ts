@@ -2,6 +2,7 @@ export interface UIReportState {
   yearOptions: YearOption[];
   filterOptions: FilterOption[];
   fetching: boolean;
+  sideNavOpen: boolean;
 }
 
 export type YearOptionName = 'All (2010-2019)' | '2018-19' | '2017-18' | '2016-17' | '2015-16' | '2014-15' | '2013-14' | '2012-13' | '2011-12' | '2010-11';

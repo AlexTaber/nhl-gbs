@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "pages-build": "ng build --prod --base-href '/nhl-goalie-prediction-model/'",
+    "pages-deploy": "npx angular-cli-ghpages --dir=dist/goalie-rotation"
   },
   "private": true,
   "dependencies": {
@@ -22,12 +24,16 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "@datorama/akita": "^3.2.3",
+    "@fortawesome/angular-fontawesome": "^0.3.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@schematics/angular": "^7.3.6",
     "angular-google-charts": "^0.1.3",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
+    "underscore": "^1.9.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

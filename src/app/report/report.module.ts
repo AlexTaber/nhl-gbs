@@ -11,12 +11,22 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReportTotalsComponent } from './report-totals/report-totals.component';
-import { MatCardModule, MatProgressBarModule } from '@angular/material';
+import { MatCardModule, MatProgressBarModule, MatSidenavModule, MatButtonModule, MatIconModule, MatToolbarModule, MatExpansionModule, MatStepperModule } from '@angular/material';
 import { SectionModule } from '../section/section.module';
 import { ReportLoadingComponent } from './report-loading/report-loading.component';
+import { ReportSidenavComponent } from './report-sidenav/report-sidenav.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faQuestion, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { NavBarModule } from '../navbar/navbar.module';
+import { RecentPerformancePredictionComponent } from './recent-performance-prediction/recent-performance-prediction.component';
+import { ReportInfoStepperComponent } from './report-info-stepper/report-info-stepper.component';
+import { ReportInfoPremiseComponent } from './report-info-premise/report-info-premise.component';
+import { ReportInfoTutorialComponent } from './report-info-tutorial/report-info-tutorial.component';
+import { ReportInfoFindingsComponent } from './report-info-findings/report-info-findings.component';
 
 @NgModule({
-  declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent, ReportTotalsComponent, ReportLoadingComponent],
+  declarations: [ReportComponent, GameProjectionComponent, FormSplitsComponent, ReportFiltersComponent, ReportTotalsComponent, ReportLoadingComponent, ReportSidenavComponent, RecentPerformancePredictionComponent, ReportInfoStepperComponent, ReportInfoPremiseComponent, ReportInfoTutorialComponent, ReportInfoFindingsComponent],
   imports: [
     CommonModule,
     GoogleChartsModule.forRoot(),
@@ -28,10 +38,22 @@ import { ReportLoadingComponent } from './report-loading/report-loading.componen
     MatCheckboxModule,
     MatCardModule,
     MatProgressBarModule,
-    SectionModule
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatExpansionModule,
+    MatStepperModule,
+    SectionModule,
+    FontAwesomeModule,
+    NavBarModule
   ],
   exports: [
     ReportComponent
   ]
 })
-export class ReportModule { }
+export class ReportModule {
+  constructor() {
+    library.add(faQuestion, faTimes);
+  }
+}

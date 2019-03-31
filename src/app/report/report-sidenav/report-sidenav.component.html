@@ -1,0 +1,20 @@
+<div class="sidenav-wrapper">
+  <mat-toolbar
+    color="primary"
+  >
+    <span>Help</span>
+
+    <span class="fill-remaining-space"></span>
+
+    <button
+      mat-icon-button
+      (click)="toggleSideNavOpen()"
+    >
+      <fa-icon icon="times"></fa-icon>
+    </button>
+  </mat-toolbar>
+
+  <app-report-info-stepper
+    (done)="toggleSideNavOpen()"
+  ></app-report-info-stepper>
+</div>  

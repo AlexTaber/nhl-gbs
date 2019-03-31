@@ -1,0 +1,63 @@
+<mat-accordion class="example-headers-align">
+  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h5>Analysis of a goaltenders form is conducted largely on a game-by-game basis</h5>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <p>
+      On teams that employ more of a 1A-1B system for rotatiing their goaltenders, choosing the starter for any given game often boils down to who has played better recently.
+    </p>
+
+    <p>
+      Seems reasonable, except for the fact that...
+    </p>
+
+    <mat-action-row>
+      <button mat-button color="primary" (click)="nextStep()">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h5>Recent performance isn't a great predictor of future performance</h5>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <p>
+      By way of example, let's generate a report for Petr Mrazek for this (the 2018-19) season. We'll throw away any appearance in which he did not face at least 16 shots (low-shot appearances can lead to dramatic outliers in the data), and then order the remaining appearances by date. Then we'll iterate through each appearance (starting with the 4th) and calculate the absolute value between Save % in that game and his average Save % in the 3 games prior. We'll then average those values. We'll then do the same, but this time all the appearances randomized. A lower number will mean a more direct correlation.
+    </p>
+
+    <app-recent-performance-prediction
+      [appearances]="singleGoalieAppearances"
+    ></app-recent-performance-prediction>
+
+    <p>
+      What you'll see (make sure you hit the reroll button a few times) is that a goalie's performance from one game to the next is almost as varied as when compared to a random set of their games.
+    </p>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Previous</button>
+      <button mat-button color="primary" (click)="nextStep()">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h5>What about performance during a game?</h5>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <p>
+      Okay so, determining how well your starter is going to play today based on how they've played recently is... slightly better than guessing. But what about the trends that emerge during a game? Can we make inferences about how a goalie will perform the rest of a game based on what has already happened?
+    </p>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Previous</button>
+      <button mat-button color="primary" (click)="onClose()">Continue</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>

@@ -1,0 +1,38 @@
+<div
+  *ngIf="report"
+  class="row"
+>
+  <div class="col-md-4">
+    <mat-card class="card">
+      <mat-card-title>
+        {{ report.orderedAverageDiff | number:'0.3' }}
+      </mat-card-title>
+
+      <mat-card-content>
+        Ordered Diff
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-md-4">
+    <mat-card class="card">
+      <mat-card-title>
+        {{ report.randomAverageDiff | number:'0.3' }}
+      </mat-card-title>
+
+      <mat-card-content>
+        Random Diff
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-md-4">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="onReroll()"
+    >
+      Reroll
+    </button>
+  </div>
+</div>

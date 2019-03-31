@@ -5,6 +5,7 @@ import { UIReportState } from './ui-report-state.model';
 function createUIInitialState(): UIReportState {
   return {
     fetching: true,
+    sideNavOpen: false,
     filterOptions: [
       { name: 'Coming Off Bench', value: 'comingOffBench' },
       { name: 'Include Overtime Data', value: 'includeOvertime' }

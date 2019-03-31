@@ -10,6 +10,7 @@ export class UIReportStateQuery extends Query<UIReportState> {
     yearOptions$: Observable<YearOption[]> = this.select(state => state.yearOptions);
     filterOptions$: Observable<FilterOption[]> = this.select(state => state.filterOptions);
     fetching$: Observable<boolean> = this.select(state => state.fetching);
+    sideNavOpen$: Observable<boolean> = this.select(state => state.sideNavOpen);
 
     constructor(
         protected store: UIReportStateStore

@@ -1,0 +1,15 @@
+.sidenav-wrapper {
+    width: 100%;
+}
+
+.fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+@media(min-width: 768px) {
+    .sidenav-wrapper {
+        width: 70vw;
+        min-width: 400px;
+        max-width: 800px;
+    }
+}

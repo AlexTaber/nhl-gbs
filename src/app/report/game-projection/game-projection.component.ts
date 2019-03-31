@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { GoogleChartComponent } from 'angular-google-charts';
 import { GoalieAppearance } from '../state/appearances/goalie-appearance.model';
+import { getNumberWithOrdinal } from 'src/app/utils';
 
 function getInitalProjectionData(): ProjectionData {
   const goalsToTrack = [ 1, 2, 3 ];
@@ -129,7 +130,7 @@ export class GameProjectionComponent implements OnInit {
   private getChartColumns(): any[] {
     return [
       'Shot Range of Goal',
-      ...this.projectionData.goalsToTrack.map(goal => `After ${goal} Goal(s)`)
+      ...this.projectionData.goalsToTrack.map(goal => `After ${getNumberWithOrdinal(goal)} Goal`)
     ]
   }
 

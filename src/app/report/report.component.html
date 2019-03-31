@@ -1,53 +1,84 @@
-<div
-  *ngIf="!(fetching$ | async); else LoadingTemplate"
-  class="container"
->
-  <div class="row">
-    <div
-      class="col-md-12"
+<mat-sidenav-container>
+  <mat-sidenav
+    [opened]="sideNavOpen$ | async"
+    [disableClose]="true"
+  >
+    <app-report-sidenav
+      *ngIf="!(fetching$ | async)"
+    ></app-report-sidenav>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <app-navbar></app-navbar>
+
+    <ng-container
+      *ngIf="!(fetching$ | async); else LoadingTemplate"
     >
-      <app-section>
-        <app-section-header>
-          Results
-        </app-section-header>
 
-        <app-section-content>
-          <app-report-filters></app-report-filters>
-        </app-section-content>
-
-        <ng-container
-          *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
+      <div
+        class="toggle-button"
+        [ngClass]="{ opened: sideNavOpen$ | async }"
+      >
+        <button
+          mat-icon-button color="primary"
+          (click)="toggleSideNavOpen()"
         >
-          <app-section-content>
-            <div class="row">
-              <div class="col-md-12">
-                <app-report-totals
-                  [appearances]="appearances$ | async"
-                ></app-report-totals>
-              </div>
-            </div>
-          </app-section-content>
-      
-          <app-section-content>
-            <div class="row">
-              <div class="col-md-6">
-                <app-form-splits
-                  [appearances]="appearances$ | async"
-                ></app-form-splits>
-              </div>
+          <fa-icon
+            icon="question"
+          ></fa-icon>
+        </button>
+      </div>
 
-              <div class="col-md-6">
-                <app-game-projection
-                  [appearances]="appearances$ | async"
-                ></app-game-projection>
-              </div>
-            </div>
-          </app-section-content>
-        </ng-container>
-      </app-section>
-    </div>
-  </div>
-</div>
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-md-12"
+          >
+            <app-section class="report-section">
+              <app-section-header>
+                Results
+              </app-section-header>
+
+              <app-section-content>
+                <app-report-filters></app-report-filters>
+              </app-section-content>
+
+              <ng-container
+                *ngIf="(appearances$ | async)?.length > 0; else NoMatchTemplate"
+              >
+                <app-section-content>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <app-report-totals
+                        [appearances]="appearances$ | async"
+                      ></app-report-totals>
+                    </div>
+                  </div>
+                </app-section-content>
+            
+                <app-section-content>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <app-form-splits
+                        [appearances]="appearances$ | async"
+                      ></app-form-splits>
+                    </div>
+
+                    <div class="col-md-6">
+                      <app-game-projection
+                        [appearances]="appearances$ | async"
+                      ></app-game-projection>
+                    </div>
+                  </div>
+                </app-section-content>
+              </ng-container>
+            </app-section>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </mat-sidenav-content>
+</mat-sidenav-container>  
 
 <ng-template #NoMatchTemplate>
   <app-section-content>
