@@ -1,0 +1,65 @@
+<p>
+  How can teams leverage these findings to gain a competitive edge? I believe so, in the form of a radical new system of goalie management.
+</p>
+
+<h3>The Goalie Bullpen System (GBS)</h3>
+
+<p>
+  After each goal allowed, a goaltender swap will take place under the following condition:
+</p>
+
+<pre>
+  <small>totalShots < (goal * Math.max(15 - ((goal - 1) * 2), 10));</small>
+</pre>
+
+<div class="row">
+  <div class="col-md-3 col-sm-4 col-xs-4"><h5>Goal</h5></div>
+  
+  <div class="col-md-4 col-sm-8 col-xs-8"><h5>Swap If Shots Less Than</h5></div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-4 col-xs-4">1st</div>
+  
+  <div class="col-md-3 col-sm-4 col-xs-4">15</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-4 col-xs-4">2nd</div>
+  
+  <div class="col-md-3 col-sm-4 col-xs-4">26</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-4 col-xs-4">3rd</div>
+  
+  <div class="col-md-3 col-sm-4 col-xs-4">33</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-4 col-xs-4">4th</div>
+  
+  <div class="col-md-3 col-sm-4 col-xs-4">40</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-4 col-xs-4">5th</div>
+  
+  <div class="col-md-3 col-sm-4 col-xs-4">50</div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 col-sm-4 col-xs-4">...</div>
+</div>
+
+<h5>
+  Wait, is that really it?
+</h5>
+
+<p>
+  Absolutely. 
+</p>
+
+<mat-action-row>
+  <button mat-button color="primary" (click)="onClose()">Close</button>
+</mat-action-row>

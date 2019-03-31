@@ -2,6 +2,8 @@
   <mat-sidenav
     [opened]="sideNavOpen$ | async"
     [disableClose]="true"
+    [fixedInViewport]="true"
+    position="end"
   >
     <app-report-sidenav
       *ngIf="!(fetching$ | async)"
@@ -14,21 +16,6 @@
     <ng-container
       *ngIf="!(fetching$ | async); else LoadingTemplate"
     >
-
-      <div
-        class="toggle-button"
-        [ngClass]="{ opened: sideNavOpen$ | async }"
-      >
-        <button
-          mat-icon-button color="primary"
-          (click)="toggleSideNavOpen()"
-        >
-          <fa-icon
-            icon="question"
-          ></fa-icon>
-        </button>
-      </div>
-
       <div class="container">
         <div class="row">
           <div

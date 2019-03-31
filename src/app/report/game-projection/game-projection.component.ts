@@ -130,7 +130,7 @@ export class GameProjectionComponent implements OnInit {
   private getChartColumns(): any[] {
     return [
       'Shot Range of Goal',
-      ...this.projectionData.goalsToTrack.map(goal => `After ${getNumberWithOrdinal(goal)} Goal`)
+      ...this.projectionData.goalsToTrack.map(goal => `${getNumberWithOrdinal(goal)} Goal`)
     ]
   }
 
@@ -148,8 +148,8 @@ export class GameProjectionComponent implements OnInit {
 
   private getChartOptions(): any {
     return {
-      vAxis: { title: 'Save %' },
-      hAxis: { title: `Shot Range In Which N'th Goal Occurred` },
+      vAxis: { title: 'Save % After Goal' },
+      hAxis: { title: `Shot Range In Which Goal Occurred` },
     }
   }
 

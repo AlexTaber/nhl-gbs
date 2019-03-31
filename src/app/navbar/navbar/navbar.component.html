@@ -1,5 +1,23 @@
 <mat-toolbar color="primary">
-  <div class="container">
-    <span>NHL Goaltender Performance</span>
-  </div>
+  <span>NHL Goaltender Performance</span>
+
+  <span class="fill-remaining-space"></span>
+
+  <a href="https://github.com/AlexTaber/nhl-goalie-prediction-model" target="_blank">
+    <button
+      color="primary"
+      mat-mini-fab
+    >
+      <fa-icon [icon]="['fab', 'github']"></fa-icon>
+    </button>
+  </a>
+
+  <button
+    color="primary"
+    mat-mini-fab
+    [disabled]="fetching$ | async"
+    (click)="toggleSideNavOpen()"
+  >
+    <fa-icon icon="question"></fa-icon>
+  </button>
 </mat-toolbar>
