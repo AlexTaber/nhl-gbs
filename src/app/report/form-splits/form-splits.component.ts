@@ -15,7 +15,7 @@ interface FormSplit {
 }
 
 function getInitialFormSplitReport(): FormSplitReport {
-  const splitCount = 4;
+  const splitCount = 2;
   const report = { splits: [], totalGoals: 0, totalShots: 0 };
   for (let i = 0; i < splitCount; i ++) { report.splits.push({ shots: 0, goals: 0 }) }
   return report;

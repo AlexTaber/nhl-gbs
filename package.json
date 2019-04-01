@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pages-build": "ng build --prod --base-href '/nhl-goalie-prediction-model/'",
+    "pages-build": "ng build --prod --base-href '/nhl-gbs/'",
     "pages-deploy": "npx angular-cli-ghpages --dir=dist/goalie-rotation"
   },
   "private": true,

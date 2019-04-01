@@ -1,6 +1,6 @@
-# NHL Goalie Prediction Model
+# Goalie Bullpen System (GBS)
 
-Using data pulled from the NHL's API, this project contains reports pertaining to the impact of letting in a goal of a goaltender's performance for the rest of the game. 
+Using data pulled from the NHL's API, this project contains reports pertaining to the impact of letting in a goal of a goaltender's performance for the rest of the game, and proposes a radical new system of goalie management.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
 
