@@ -77,9 +77,19 @@
 
 <h4>There is, of course, a pitfall (but one that can be addressed)</h4>
 
-<h5>The data shows us that goalies coming off the bench produce considerably worse performances</h5>
+<p>In my dataset, save percentage is .914. But if you filter by appearances where the goalie comes in cold off the bench, it drops to <i>.904</i>.</p>
 
-<p></p>
+<p>
+  Yikes. That doesn't exactly support my case for GBS. But there are a couple of massive issues with that dataset.
+</p>
+
+<p>
+  First, that data is derived largely from non-competitive situations, where the opponent is dominating the game.
+</p>
+
+<p>
+  Second, of the 22362 total appearances in the data, only 1580 are from goalies coming off the bench. So if goalie on the bench to start a game has less than an 8% chance of playing. Given this, backups amount to an afterthought in a hat. Their preparation isn't the same as the starter's, and they spend the game dormant apart from occasionally saving the team from a stray puck. With GBS, a backup is as essential to the framework of the team as any other player. They are more than likely going to appear in the game, and would be expected to stay loose and prepared.
+</p>
 
 <mat-action-row>
   <button mat-button color="primary" (click)="onClose()">Close</button>
