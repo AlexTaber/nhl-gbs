@@ -11,7 +11,6 @@ import { GoalieQuery } from '../state/goalies/goalie.query';
 export class ReportInfoPremiseComponent implements OnInit {
   @Output() close: EventEmitter<undefined> = new EventEmitter<undefined>();
 
-  step = 0;
   singleGoalieAppearances: GoalieAppearance[];
 
   constructor(
@@ -21,18 +20,6 @@ export class ReportInfoPremiseComponent implements OnInit {
 
   ngOnInit() {
     this.setAppearances();
-  }
-
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
   }
 
   onClose(): void {

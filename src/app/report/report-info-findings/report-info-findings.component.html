@@ -1,72 +1,31 @@
-<mat-accordion class="example-headers-align">  
-  <p>
-    So what does that actual data tell us? An awful lot, it turns out. Here are some of the key findings:
-  </p>
+<p>
+  So what does that actual data tell us? An awful lot, it turns out. Here are some of the key findings:
+</p>
 
-  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h5>Goalies are at their best before letting in a goal</h5>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+<h3>Goalies are at their best before letting in a goal</h3>
 
-    <p>
-      test
-    </p>
+<p>
+  test
+</p>
 
-    <mat-action-row>
-      <button mat-button color="primary" (click)="nextStep()">Next</button>
-    </mat-action-row>
-  </mat-expansion-panel>
+<h3>Early goals are indicative of poor form</h3>
 
-  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h5>Early goals are indicative of poor form</h5>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+<p>
+  test
+</p>
 
-    <p>
-      test
-    </p>
+<h3>Not every goalie adheres to these patterns</h3>
 
-    <mat-action-row>
-      <button mat-button (click)="prevStep()">Previous</button>
-      <button mat-button color="primary" (click)="nextStep()">Next</button>
-    </mat-action-row>
-  </mat-expansion-panel>
+<p>
+  test
+</p>
 
-  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h5>Not every goalie adheres to these patterns</h5>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+<h3>Goalies coming off the bench tend to not perform well</h3>
 
-    <p>
-      test
-    </p>
+<p>
+  test
+</p>
 
-    <mat-action-row>
-      <button mat-button (click)="prevStep()">Previous</button>
-      <button mat-button color="primary" (click)="nextStep()">Next</button>
-    </mat-action-row>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h5>Goalies coming off the bench tend to not perform well</h5>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
-    <p>
-      test
-    </p>
-
-    <mat-action-row>
-      <button mat-button (click)="prevStep()">Previous</button>
-      <button mat-button color="primary" (click)="onClose()">Got It!</button>
-    </mat-action-row>
-  </mat-expansion-panel>
-</mat-accordion>
+<app-action-row>
+  <button mat-button color="primary" (click)="onClose()">Continue</button>
+</app-action-row>

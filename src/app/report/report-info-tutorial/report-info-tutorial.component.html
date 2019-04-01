@@ -1,98 +1,57 @@
-<mat-accordion class="example-headers-align"> 
-  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h5>The Data Collected</h5>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+<h3>The Data Collected</h3>
 
-    <p>
-      This project uses data for every goalie appearance going back to 2010 (when the NHL began tracking play-by-play data).
-    </p>
+<p>
+  This project uses data for every goalie appearance going back to 2010 (when the NHL began tracking play-by-play data).
+</p>
 
-    <p><i>
-      Note that by default Overtime data is filtered out of the reports
-    </i></p>
+<p><i>
+  Note that by default Overtime data is filtered out of the reports
+</i></p>
     
-    <mat-action-row>
-      <button mat-button color="primary" (click)="nextStep()">Next</button>
-    </mat-action-row>
-  </mat-expansion-panel>
-  
-  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h5>The Schema</h5>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+<h3>The Schema</h3>
 
-    <p>
-      Every goalie appearance contains an array of what I'm calling 'Form's. A form is simply a run of play up until the point a goal is allowed. For instance, if in an appearance a goalie faces 40 shots and allows a goal on the 15th, 26th, 34rd, and 36th shot, it would produce the following array of forms.
-    </p>
+<p>
+  Every goalie appearance contains an array of what I'm calling 'Form's. A form is simply a run of play up until the point a goal is allowed. For instance, if in an appearance a goalie faces 40 shots and allows a goal on the 15th, 26th, 34rd, and 36th shot, it would produce the following array of forms.
+</p>
     
-    <pre>{{ exampleFormsJson }}</pre>
+<pre>{{ exampleFormsJson }}</pre>
 
-    <mat-action-row>
-        <button mat-button (click)="prevStep()">Previous</button>
-      <button mat-button color="primary" (click)="nextStep()">Next</button>
-    </mat-action-row>
-  </mat-expansion-panel>
+<h3>The Goal Split Report</h3>
 
-  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <h5>The Goal Split Report</h5>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+<p>
+  The Goal Split Report looks at how a goaltender performs from the start of an appearance until giving up their first goal, from after the first goal until the 2nd, after the 2nd until the 3rd etc...
+</p>
 
-      <p>
-        The Goal Split Report looks at how a goaltender performs from the start of an appearance until giving up their first goal, from after the first goal until the 2nd, after the 2nd until the 3rd etc...
-      </p>
+<p>
+  If we take the example game outlined in the above section, it would produce the following report.
+</p>
 
-      <p>
-        If we take the example game outlined in the above section, it would produce the following report.
-      </p>
+<app-form-splits
+  [appearances]="exampleSplitReportAppearances"
+></app-form-splits>
+
+<p>
+  In this example game, we can infer that the goalie's performance was strongly affected by every goal they allowed, as each goal resulted in a decrease in their form.
+</p>
   
-      <app-form-splits
-        [appearances]="exampleSplitReportAppearances"
-      ></app-form-splits>
+<h3>The Game Projection Report</h3>
 
-      <p>
-        In this example game, we can infer that the goalie's performance was strongly affected by every goal they allowed, as each goal resulted in a decrease in their form.
-      </p>
-  
-      <mat-action-row>
-        <button mat-button (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
-      </mat-action-row>
-    </mat-expansion-panel>
+<p>
+  This report is designed to answer questions such as "if a goalie allows their 2nd goal against on their 9th shot against, how do we expect them to perform for the rest of the game?".
+</p>
 
-  <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h5>The Game Projection Report</h5>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+<p>
+  For this report, we'll need a more robust data set. The below is for every goalie appearance in the 2017-18 season.
+</p>
 
-    <p>
-      This report is designed to answer questions such as "if a goalie allows their 2nd goal against on their 9th shot against, how do we expect them to perform for the rest of the game?".
-    </p>
+<app-game-projection
+  [appearances]="exampleProjectionReportAppearances"
+></app-game-projection>
 
-    <p>
-      For this report, we'll need a more robust data set. The below is for every goalie appearance in the 2017-18 season.
-    </p>
+<p>
+  From this report, the answer to the question "if a goalie allows their 2nd goal against on their 9th shot against, how do we expect them to perform for the rest of the game?" is "considerably below average". We know this because, when the 2nd goal of the game is scored between the 6th and 10th shot, thereafter goalies average a much lower Save Percentage (.901, compared to the leaguewide average of .912). 
+</p>
 
-    <app-game-projection
-      [appearances]="exampleProjectionReportAppearances"
-    ></app-game-projection>
-
-    <p>
-      From this report, the answer to the question "if a goalie allows their 2nd goal against on their 9th shot against, how do we expect them to perform for the rest of the game?" is "considerably below average". We know this because, when the 2nd goal of the game is scored between the 6th and 10th shot, thereafter goalies average a much lower Save Percentage (.901, compared to the leaguewide average of .912). 
-    </p>
-
-    <mat-action-row>
-      <button mat-button (click)="prevStep()">Previous</button>
-      <button mat-button color="primary" (click)="onClose()">Continue</button>
-    </mat-action-row>
-  </mat-expansion-panel>
-</mat-accordion>
+<app-action-row>
+  <button mat-button color="primary" (click)="onClose()">Continue</button>
+</app-action-row>

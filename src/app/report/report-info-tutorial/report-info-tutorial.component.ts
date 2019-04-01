@@ -10,7 +10,6 @@ import { GoalieAppearanceQuery } from '../state/appearances/goalie-appearance.qu
 export class ReportInfoTutorialComponent implements OnInit {
   @Output() close: EventEmitter<undefined> = new EventEmitter<undefined>();
 
-  step = 0;
   exampleSplitReportAppearances: GoalieAppearance[];
   exampleProjectionReportAppearances: GoalieAppearance[];
   example
@@ -22,18 +21,6 @@ export class ReportInfoTutorialComponent implements OnInit {
 
   ngOnInit() {
     this.setExampleFormsJson();
-  }
-
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
   }
 
   onClose(): void {
